@@ -8,6 +8,8 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QWidget>
+#include <iostream>
+#include <vector>
 
 class Preprocessing : public QWidget
 {
@@ -24,10 +26,20 @@ private slots:
 private:
     QAudioDecoder* decoder;
     QAudioBuffer buffer;
-    const quint16 * data;
+    int fcount;
 
     int status,error;
     void start();
+
+    template<typename T>
+    std::vector<T> bufferData(T *data, qint32 N);
+
+    template<typename T>
+    void Framing(std::vector<T> buffer,int start,int end);
+
+    std::vector<QAudioBuffer::S16S> currentBuffer;
+    std::vector<QAudioBuffer::S16U> currentBuffer1;
+    std::vector<QAudioBuffer::S32F> currentBuffer2;
 
 
 };
