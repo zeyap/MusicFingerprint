@@ -3,25 +3,26 @@
 
 #include <QMainWindow>
 #include <QObject>
+#include <QGridLayout>
 #include "preprocessing.h"
+#include "renderarea.h"
+#include <QPushButton>
 
-namespace Ui {
-class MainWindow;
-}
 
-class MainWindow : public QMainWindow
+class MainWindow : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    MainWindow();
+    //~MainWindow();
     Preprocessing* preprocessing;
 private slots:
     void Decode();
 
 private:
-    Ui::MainWindow *ui;
+    RenderArea* renderArea;
+    QPushButton* readButton;
 };
 
 #endif // MAINWINDOW_H

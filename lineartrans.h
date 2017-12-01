@@ -2,12 +2,13 @@
 #define LINEARTRANS_H
 
 #include <fftw3/fftw3.h>
+#include <vector>
 
-class lineartrans
+class LinearTrans
 {
 public:
-    lineartrans(int N);
-    ~lineartrans();
+    LinearTrans(std::vector<double>input, int N);
+    ~LinearTrans();
     void FFT();
 private:
     fftw_complex *in, *out;

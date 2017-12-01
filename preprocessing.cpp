@@ -109,7 +109,7 @@ void Preprocessing::Framing(std::vector<double> buffer){
         }
         int n=frame.size();
 
-        newDFT=new lineartrans(n);
+        newDFT=new LinearTrans(frame,n);
         delete(newDFT);
 
     }

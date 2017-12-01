@@ -14,12 +14,11 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     preprocessing.cpp \
-    lineartrans.cpp
+    lineartrans.cpp \
+    renderarea.cpp
 
 HEADERS += \
         mainwindow.h \
     preprocessing.h \
-    lineartrans.h
-
-FORMS += \
-        mainwindow.ui
+    lineartrans.h \
+    renderarea.h

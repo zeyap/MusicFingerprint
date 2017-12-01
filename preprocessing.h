@@ -38,7 +38,7 @@ private:
 
     std::vector<double> currentBuffer;
 
-    lineartrans* newDFT;
+    LinearTrans* newDFT;
 
 };
 
