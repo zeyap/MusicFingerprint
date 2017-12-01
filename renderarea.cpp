@@ -32,7 +32,8 @@ void RenderArea::mousePressEvent(QMouseEvent *event){
 }
 
 void RenderArea::SetPathPoint(std::vector<QPoint> newPath){
-    swap(newPath,pathPoints);
+
+    pathPoints.insert(pathPoints.end(),newPath.begin(),newPath.end());
 }
 
 

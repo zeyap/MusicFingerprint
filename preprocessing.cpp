@@ -1,9 +1,4 @@
 #include <preprocessing.h>
-#define Sample_Size 16
-#define Sample_Rate 80//Hz
-#define Channel_Count 1
-#define Frame_Size 0.1f//10-500 ms
-#define Overlap 0.5f
 
 Preprocessing::Preprocessing()
 {
@@ -34,6 +29,7 @@ void Preprocessing::InitDecoder(){
     connect(decoder, SIGNAL(bufferReady()), this, SLOT(readBuffer()));
 
     SamplePerFrame=Sample_Rate*Frame_Size;
+    totalscount=0;
 
     start();
 
@@ -47,40 +43,35 @@ void Preprocessing::start(){
 
 void Preprocessing::readBuffer(){
 
-    buffer=decoder->read();
-    scount=buffer.sampleCount();
-    std::vector<double> dataInDouble;
+    QAudioBuffer buffer=decoder->read();
+    int scount=buffer.sampleCount();
+    totalscount+=scount;
+    std::vector<double> bufferDataInDouble;
     if(buffer.format().sampleType()==QAudioFormat::SignedInt){
         QAudioBuffer::S16S * data=buffer.data<QAudioBuffer::S16S>();
         for(int i=0;i<scount;i++){
-            dataInDouble.push_back(data[i].left);
+            bufferDataInDouble.push_back(data[i].left);
         }
     }
     else if (buffer.format().sampleType() == QAudioFormat::UnSignedInt){
         QAudioBuffer::S16U *data = buffer.data<QAudioBuffer::S16U>();
         for(int i=0;i<scount;i++){
-            dataInDouble.push_back(data[i].left);
+            bufferDataInDouble.push_back(data[i].left);
         }
     }
     else if(buffer.format().sampleType() == QAudioFormat::Float){
         QAudioBuffer::S32F *data = buffer.data<QAudioBuffer::S32F>();
         for(int i=0;i<scount;i++){
-            dataInDouble.push_back(data[i].left);
+            bufferDataInDouble.push_back(data[i].left);
         }
     }
-    bufferData(dataInDouble,scount);
-
-
-    Framing(currentBuffer);
-
+    bufferData(bufferDataInDouble,scount);
 }
 
 void Preprocessing::bufferData(std::vector<double> data, qint32 N){
-    //std::vector<double> currentBuffer;
     for (int i = 0; i < N; i++){
         currentBuffer.push_back(data[i]);
     }
-    //return currentBuffer;
 }
 
 void Preprocessing::onFinished(){
@@ -88,29 +79,32 @@ void Preprocessing::onFinished(){
     msgBox.setText("finished");
     msgBox.exec();
 
-    readBuffer();
-
+    Framing(currentBuffer);
 }
 
-void Preprocessing::Framing(std::vector<double> buffer){
-    int fcount=(scount-1)/SamplePerFrame;
+void Preprocessing::Framing(std::vector<double> sBuffer){
+    int fcount=(totalscount-1)/SamplePerFrame;
 
-    for(int fNum=0;fNum<fcount;fNum+=fcount){
+    for(int fNum=0;fNum<fcount;fNum+=1){
 
         std::vector<double> frame;
 
-        for(int i=0;i<SamplePerFrame;i++){
-
-            int sIdx=fNum*SamplePerFrame+i;
-            if(sIdx<scount){
-                frame.push_back(buffer[sIdx]);
+        //getFrame from buffer
+        for(int i=fNum*SamplePerFrame;i<(fNum+1)*SamplePerFrame;i++){
+            if(i<totalscount){
+                frame.push_back(sBuffer[i]);
             }
         }
-        int n=frame.size();
 
-        newDFT=new LinearTrans(frame,n);
-        delete(newDFT);
+        FrameProcess(frame);
 
     }
 }
+
+void Preprocessing::FrameProcess(std::vector<double> frame){
+    int n=frame.size();
+    newDFT=new LinearTrans(frame,n);
+    delete(newDFT);
+}
+
 
