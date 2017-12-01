@@ -1,14 +1,27 @@
 #include "renderarea.h"
 
+static std::vector<QPoint> pathPoints;
+static RenderArea* renderArea;
+
 RenderArea::RenderArea(QWidget *parent)
     : QWidget(parent)
 {
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
 
+}
+
+RenderArea* RenderArea::getInstance(){
+    if(renderArea==NULL){
+        renderArea=new RenderArea;
+        renderArea->Init();
+    }
+    return renderArea;
+}
+
+void RenderArea::Init(){
     pathPoints.push_back(QPoint(1,1));
     pathPoints.push_back(QPoint(10,10));
-
 }
 
 
@@ -19,7 +32,7 @@ void RenderArea::mousePressEvent(QMouseEvent *event){
 }
 
 void RenderArea::SetPathPoint(std::vector<QPoint> newPath){
-
+    swap(newPath,pathPoints);
 }
 
 

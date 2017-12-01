@@ -12,7 +12,6 @@ Preprocessing::Preprocessing()
 
 void Preprocessing::InitDecoder(){
 
-
     QAudioFormat format;
     format.setChannelCount(Channel_Count);
     format.setSampleSize(Sample_Size);

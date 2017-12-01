@@ -11,6 +11,8 @@ LinearTrans::LinearTrans(std::vector<double> input, int N)
 
     FFT();
 
+    Draw(out,N);
+
 }
 
 LinearTrans::~LinearTrans(){
@@ -21,4 +23,13 @@ LinearTrans::~LinearTrans(){
 
 void LinearTrans::FFT(){
     fftw_execute(p);
+}
+\
+void LinearTrans::Draw(fftw_complex* out, int N){
+    renderArea=RenderArea::getInstance();
+    std::vector<QPoint> pathPoint;
+    for(int i=0;i<N;i++){
+        pathPoint.push_back(QPoint(50+i*50,out[i][1]));
+    }
+    renderArea->SetPathPoint(pathPoint);
 }

@@ -3,7 +3,7 @@
 MainWindow::MainWindow()
 {
     preprocessing=new Preprocessing();
-    renderArea=new RenderArea;
+    renderArea=RenderArea::getInstance();
 
     readButton=new QPushButton(tr("read audio"));
     connect(readButton,SIGNAL(clicked(bool)),this,SLOT(Decode()));

@@ -15,7 +15,7 @@ class RenderArea:public QWidget
     Q_OBJECT
 
 public:
-    RenderArea(QWidget *parent=0);
+    static RenderArea* getInstance();
     int height=50;
     int width=80;
     void SetPathPoint(std::vector<QPoint> newPath);
@@ -23,7 +23,10 @@ public:
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void paintEvent(QPaintEvent *) override;
-    std::vector<QPoint> pathPoints;
+
+private:
+    RenderArea(QWidget *parent=0);
+    static void Init();
 };
 
 #endif // RENDERAREA_H
