@@ -9,14 +9,14 @@
 class LinearTrans
 {
 public:
-    LinearTrans(std::vector<double>input, int N);
+    LinearTrans(std::vector<double>input, int N, int fnum);
     ~LinearTrans();
     void FFT();
 private:
     fftw_complex *in, *out;
     fftw_plan p;
     RenderArea* renderArea;
-    void Draw(fftw_complex* out, int N);
+    void Draw(fftw_complex* out, int N, int fnum);
 };
 
 #endif // LINEARTRANS_H

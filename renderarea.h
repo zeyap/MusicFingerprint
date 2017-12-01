@@ -1,11 +1,7 @@
 #ifndef RENDERAREA_H
 #define RENDERAREA_H
-/*
-#define XOffSetUnit 10
-#define YOffSet 200
-#define YScale 0.01
-#define Frame_Size 16;
-*/
+
+#include <main.h>
 
 #include <QPen>
 #include <QWidget>

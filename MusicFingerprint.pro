@@ -21,4 +21,5 @@ HEADERS += \
         mainwindow.h \
     preprocessing.h \
     lineartrans.h \
-    renderarea.h
+    renderarea.h \
+    main.h

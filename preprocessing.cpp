@@ -96,14 +96,14 @@ void Preprocessing::Framing(std::vector<double> sBuffer){
             }
         }
 
-        FrameProcess(frame);
+        FrameProcess(frame,fNum);
 
     }
 }
 
-void Preprocessing::FrameProcess(std::vector<double> frame){
+void Preprocessing::FrameProcess(std::vector<double> frame,int fnum){
     int n=frame.size();
-    newDFT=new LinearTrans(frame,n);
+    newDFT=new LinearTrans(frame,n,fnum);
     delete(newDFT);
 }
 

@@ -1,6 +1,6 @@
 #include "lineartrans.h"
 
-LinearTrans::LinearTrans(std::vector<double> input, int N)
+LinearTrans::LinearTrans(std::vector<double> input, int N, int fnum)
 {
     in = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*N);
     for(int i=0;i<N;i++){
@@ -12,7 +12,7 @@ LinearTrans::LinearTrans(std::vector<double> input, int N)
 
     FFT();
 
-    Draw(out,N);
+    Draw(out,N,fnum);
 
 }
 
@@ -26,11 +26,11 @@ void LinearTrans::FFT(){
     fftw_execute(p);
 }
 \
-void LinearTrans::Draw(fftw_complex* out, int N){
+void LinearTrans::Draw(fftw_complex* out, int N, int fnum){
     renderArea=RenderArea::getInstance();
     std::vector<QPoint> pathPoint;
     for(int i=0;i<N;i++){
-        pathPoint.push_back(QPoint(i*10+50,0.001*out[i][1]+200));
+        pathPoint.push_back(QPoint(i*XScale+XOffSet+XOffSet*1*fnum,YScale*out[i][1]+YOffSet));
     }
     renderArea->SetPathPoint(pathPoint);
 }

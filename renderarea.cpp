@@ -20,8 +20,7 @@ RenderArea* RenderArea::getInstance(){
 }
 
 void RenderArea::Init(){
-    pathPoints.push_back(QPoint(1,1));
-    pathPoints.push_back(QPoint(10,10));
+    pathPoints.clear();
 }
 
 
@@ -46,8 +45,11 @@ void RenderArea::paintEvent(QPaintEvent *){
 
     QPainterPath path;
 
-    for(int i=0;i<pathPoints.size();i++){
-        path.lineTo(pathPoints[i]);
+    if(pathPoints.size()>0){
+        path.moveTo(pathPoints[0]);
+        for(int i=0;i<pathPoints.size();i++){
+            path.lineTo(pathPoints[i]);
+        }
     }
 
     painter.drawPath(path);

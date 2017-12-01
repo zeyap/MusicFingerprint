@@ -1,11 +1,7 @@
 #ifndef PREPROCESSING_H
 #define PREPROCESSING_H
 
-#define Sample_Size 16
-#define Sample_Rate 80//Hz
-#define Channel_Count 1
-#define Frame_Size 0.1f//10-500 ms
-#define Overlap 0.5f
+#include <main.h>
 
 #include <QMultimedia>
 #include <QAudioFormat>
@@ -40,7 +36,7 @@ private:
 
     void bufferData(std::vector<double> data, qint32 N);
     void Framing(std::vector<double> sBuffer);
-    void FrameProcess(std::vector<double> frame);
+    void FrameProcess(std::vector<double> frame, int fnum);
 
     std::vector<double> currentBuffer;
 
