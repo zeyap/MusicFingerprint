@@ -1,6 +1,6 @@
 #include <preprocessing.h>
 #define Sample_Size 16
-#define Sample_Rate 8000//Hz
+#define Sample_Rate 80//Hz
 #define Channel_Count 1
 #define Frame_Size 0.1f//10-500 ms
 #define Overlap 0.5f
@@ -12,6 +12,7 @@ Preprocessing::Preprocessing()
 
 void Preprocessing::InitDecoder(){
 
+
     QAudioFormat format;
     format.setChannelCount(Channel_Count);
     format.setSampleSize(Sample_Size);
@@ -21,7 +22,7 @@ void Preprocessing::InitDecoder(){
 
     decoder->setAudioFormat(format);
 
-    const QString fname="record.wav";
+    const QString fname="20130505134926.mp3";
     if(QFile::exists(fname)){
         decoder->setSourceFilename(fname);
     }else{
@@ -30,8 +31,10 @@ void Preprocessing::InitDecoder(){
         msgBox.exec();
     }
 
-    connect(decoder, SIGNAL(bufferReady()), this, SLOT(readBuffer()));
     connect(decoder, SIGNAL(finished()), this, SLOT(onFinished()));
+    connect(decoder, SIGNAL(bufferReady()), this, SLOT(readBuffer()));
+
+    SamplePerFrame=Sample_Rate*Frame_Size;
 
     start();
 
@@ -43,50 +46,71 @@ void Preprocessing::start(){
     error=decoder->error();
 }
 
+void Preprocessing::readBuffer(){
+
+    buffer=decoder->read();
+    scount=buffer.sampleCount();
+    std::vector<double> dataInDouble;
+    if(buffer.format().sampleType()==QAudioFormat::SignedInt){
+        QAudioBuffer::S16S * data=buffer.data<QAudioBuffer::S16S>();
+        for(int i=0;i<scount;i++){
+            dataInDouble.push_back(data[i].left);
+        }
+    }
+    else if (buffer.format().sampleType() == QAudioFormat::UnSignedInt){
+        QAudioBuffer::S16U *data = buffer.data<QAudioBuffer::S16U>();
+        for(int i=0;i<scount;i++){
+            dataInDouble.push_back(data[i].left);
+        }
+    }
+    else if(buffer.format().sampleType() == QAudioFormat::Float){
+        QAudioBuffer::S32F *data = buffer.data<QAudioBuffer::S32F>();
+        for(int i=0;i<scount;i++){
+            dataInDouble.push_back(data[i].left);
+        }
+    }
+    bufferData(dataInDouble,scount);
+
+
+    Framing(currentBuffer);
+
+}
+
+void Preprocessing::bufferData(std::vector<double> data, qint32 N){
+    //std::vector<double> currentBuffer;
+    for (int i = 0; i < N; i++){
+        currentBuffer.push_back(data[i]);
+    }
+    //return currentBuffer;
+}
+
 void Preprocessing::onFinished(){
     QMessageBox msgBox;
     msgBox.setText("finished");
     msgBox.exec();
-}
 
-void Preprocessing::readBuffer(){
-    buffer=decoder->read();
-    fcount=buffer.frameCount();
-    QAudioBuffer::S16S * data;
-
-    if(buffer.format().sampleType()==QAudioFormat::SignedInt){
-        data=buffer.data<QAudioBuffer::S16S>();
-        currentBuffer=bufferData(data,buffer.frameCount());
-    }
-    else if (buffer.format().sampleType() == QAudioFormat::UnSignedInt){
-
-        QAudioBuffer::S16U *data = buffer.data<QAudioBuffer::S16U>();
-        currentBuffer1=bufferData(data,buffer.frameCount());
-
-    }
-    else if(buffer.format().sampleType() == QAudioFormat::Float){
-
-        QAudioBuffer::S32F *data = buffer.data<QAudioBuffer::S32F>();
-        currentBuffer2=bufferData(data,buffer.frameCount());
-
-    }
+    readBuffer();
 
 }
 
-template<typename T>
-std::vector<T> Preprocessing::bufferData(T *data, qint32 N){
-    std::vector<T> currentBuffer;
-    for (qint32 i = 0; i < N; i++){
-        currentBuffer.push_back(data[i]);
-    }
-    return currentBuffer;
-}
+void Preprocessing::Framing(std::vector<double> buffer){
+    int fcount=(scount-1)/SamplePerFrame;
 
-template<typename T>
-void Preprocessing::Framing(std::vector<T> buffer,int start,int end){
-    int SamplePerFrame=Sample_Rate*Frame_Size;
-    std::vector<T> frame;
-    for(int i=0;i<SamplePerFrame;i++){
+    for(int fNum=0;fNum<fcount;fNum+=fcount){
+
+        std::vector<double> frame;
+
+        for(int i=0;i<SamplePerFrame;i++){
+
+            int sIdx=fNum*SamplePerFrame+i;
+            if(sIdx<scount){
+                frame.push_back(buffer[sIdx]);
+            }
+        }
+        int n=frame.size();
+
+        newDFT=new lineartrans(n);
+        delete(newDFT);
 
     }
 }
