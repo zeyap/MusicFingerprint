@@ -35,10 +35,10 @@ private:
     void start();
 
     void bufferData(std::vector<double> data, qint32 N);
-    void Framing(std::vector<double> sBuffer);
+    void Framing(std::vector<double> pcmBuffer);
     void FrameProcess(std::vector<double> frame, int fnum);
 
-    std::vector<double> currentBuffer;
+    std::vector<double> pcmBuffer;
 
     LinearTrans* newDFT;
 

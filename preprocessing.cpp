@@ -16,7 +16,7 @@ void Preprocessing::InitDecoder(){
 
     decoder->setAudioFormat(format);
 
-    const QString fname="20130505134926.mp3";
+    const QString fname="201305051349262.mp3";
     if(QFile::exists(fname)){
         decoder->setSourceFilename(fname);
     }else{
@@ -44,25 +44,27 @@ void Preprocessing::start(){
 void Preprocessing::readBuffer(){
 
     QAudioBuffer buffer=decoder->read();
-    int scount=buffer.sampleCount();
+    int scount=buffer.frameCount();
+    //frame: one sample per channel for the same instant in time.
+    //sample=frame*channel: the number of samples in this buffer
     totalscount+=scount;
     std::vector<double> bufferDataInDouble;
     if(buffer.format().sampleType()==QAudioFormat::SignedInt){
-        QAudioBuffer::S16S * data=buffer.data<QAudioBuffer::S16S>();
+        const QAudioBuffer::S16S * data=buffer.constData<QAudioBuffer::S16S>();
         for(int i=0;i<scount;i++){
-            bufferDataInDouble.push_back(data[i].left);
+            bufferDataInDouble.push_back((double)data[i].average());
         }
     }
     else if (buffer.format().sampleType() == QAudioFormat::UnSignedInt){
-        QAudioBuffer::S16U *data = buffer.data<QAudioBuffer::S16U>();
+        const QAudioBuffer::S16U *data = buffer.constData<QAudioBuffer::S16U>();
         for(int i=0;i<scount;i++){
-            bufferDataInDouble.push_back(data[i].left);
+            bufferDataInDouble.push_back(data[i].average());
         }
     }
     else if(buffer.format().sampleType() == QAudioFormat::Float){
-        QAudioBuffer::S32F *data = buffer.data<QAudioBuffer::S32F>();
+        const QAudioBuffer::S32F *data = buffer.constData<QAudioBuffer::S32F>();
         for(int i=0;i<scount;i++){
-            bufferDataInDouble.push_back(data[i].left);
+            bufferDataInDouble.push_back(data[i].average());
         }
     }
     bufferData(bufferDataInDouble,scount);
@@ -70,7 +72,7 @@ void Preprocessing::readBuffer(){
 
 void Preprocessing::bufferData(std::vector<double> data, qint32 N){
     for (int i = 0; i < N; i++){
-        currentBuffer.push_back(data[i]);
+        pcmBuffer.push_back(data[i]);
     }
 }
 
@@ -79,10 +81,10 @@ void Preprocessing::onFinished(){
     msgBox.setText("finished");
     msgBox.exec();
 
-    Framing(currentBuffer);
+    Framing(pcmBuffer);
 }
 
-void Preprocessing::Framing(std::vector<double> sBuffer){
+void Preprocessing::Framing(std::vector<double> pcmBuffer){
     int fcount=(totalscount-1)/SamplePerFrame;
 
     for(int fNum=0;fNum<fcount;fNum+=1){
@@ -92,7 +94,7 @@ void Preprocessing::Framing(std::vector<double> sBuffer){
         //getFrame from buffer
         for(int i=fNum*SamplePerFrame;i<(fNum+1)*SamplePerFrame;i++){
             if(i<totalscount){
-                frame.push_back(sBuffer[i]);
+                frame.push_back(pcmBuffer[i]);
             }
         }
 
@@ -103,7 +105,7 @@ void Preprocessing::Framing(std::vector<double> sBuffer){
 
 void Preprocessing::FrameProcess(std::vector<double> frame,int fnum){
     int n=frame.size();
-    newDFT=new LinearTrans(frame,n,fnum);
+    newDFT=new LinearTrans(frame,fnum);
     delete(newDFT);
 }
 
