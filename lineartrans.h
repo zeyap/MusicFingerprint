@@ -12,14 +12,16 @@ class LinearTrans
 public:
     LinearTrans(std::vector<double> pcmInput, int fnum);
     ~LinearTrans();
-    void FFT();
+    std::vector<int> GetFeatureVector();
 private:
     double *in;
     fftw_complex *out;
     fftw_plan p;
     RenderArea* renderArea;
-    void ShowTag(int fnum);
-    void FindFeatureVector(fftw_complex* out);
+    void FFT();
+    void ShowFeature(int fnum);
+
+    void GenFeatureVector(fftw_complex* out);
     int featurev[5][2];//freq+db
     double basef=1/Frame_Size;//10 //Sample_Rate/(Sample_Rate*Frame_Size);
     int spf=Sample_Rate*Frame_Size;//80

@@ -22,6 +22,7 @@ void Preprocessing::InitDecoder(){
     connect(decoder, SIGNAL(bufferReady()), this, SLOT(readBuffer()));
 
     SamplePerFrame=Sample_Rate*Frame_Size;
+    FrameSampleOffset=Frame_Interval*Sample_Rate;
 
 }
 
@@ -29,7 +30,7 @@ void Preprocessing::Decode(){
 
     totalscount=0;
 
-    ClearPCMBuffer();
+    ClearBuffers();
 
     if(QFile::exists(fpath)){
         decoder->setSourceFilename(fpath);
@@ -42,9 +43,12 @@ void Preprocessing::Decode(){
 
 }
 
-void Preprocessing::ClearPCMBuffer(){
+void Preprocessing::ClearBuffers(){
     while(pcmBuffer.size()>0){
         pcmBuffer.pop_back();
+    }
+    while(featureBuffer.size()>0){
+        featureBuffer.pop_back();
     }
 }
 
@@ -95,17 +99,19 @@ void Preprocessing::onFinished(){
     msgBox.exec();
 
     Framing(pcmBuffer);
+
+    OutputFeatureBuffer();
 }
 
 void Preprocessing::Framing(std::vector<double> pcmBuffer){
-    int fcount=(totalscount-1)/SamplePerFrame;
+    int fcount=(totalscount-SamplePerFrame)/FrameSampleOffset+1;//(totalscount-1)/SamplePerFrame;
 
     for(int fNum=0;fNum<fcount;fNum+=1){
 
         std::vector<double> frame;
 
         //getFrame from buffer
-        for(int i=fNum*SamplePerFrame;i<(fNum+1)*SamplePerFrame;i++){
+        for(int i=fNum*FrameSampleOffset;i<fNum*FrameSampleOffset+SamplePerFrame;i++){
             if(i<totalscount){
                 frame.push_back(pcmBuffer[i]);
             }
@@ -119,6 +125,13 @@ void Preprocessing::Framing(std::vector<double> pcmBuffer){
 void Preprocessing::FrameProcess(std::vector<double> frame,int fnum){
     int n=frame.size();
     newDFT=new LinearTrans(frame,fnum);
+
+    FrameFeature newf;
+    newf.f=newDFT->GetFeatureVector();
+    newf.t=fnum*Frame_Interval;
+
+    featureBuffer.push_back(newf);
+
     delete(newDFT);
 }
 
@@ -126,3 +139,6 @@ void Preprocessing::SetTargetFile(QString newfpath){
     fpath=newfpath;
 }
 
+void Preprocessing::OutputFeatureBuffer(){
+
+}

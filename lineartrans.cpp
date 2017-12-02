@@ -12,9 +12,9 @@ LinearTrans::LinearTrans(std::vector<double> pcmInput, int fnum)
 
     FFT();
 
-    FindFeatureVector(out);
+    GenFeatureVector(out);
 
-    ShowTag(fnum);
+    ShowFeature(fnum);
 
 }
 
@@ -28,7 +28,7 @@ void LinearTrans::FFT(){
     fftw_execute(p);
 }
 
-void LinearTrans::FindFeatureVector(fftw_complex* out){
+void LinearTrans::GenFeatureVector(fftw_complex* out){
     double tempf;
     int bandIdx;
     for(int i=0;i<5;i++){
@@ -59,8 +59,16 @@ void LinearTrans::FindFeatureVector(fftw_complex* out){
         }
     }
 }
+
+std::vector<int> LinearTrans::GetFeatureVector(){
+    std::vector<int> v;
+    for(int i=0;i<5;i++){
+        v.push_back(featurev[i][0]);
+    }
+    return v;
+}
 \
-void LinearTrans::ShowTag(int fnum){
+void LinearTrans::ShowFeature(int fnum){
     renderArea=RenderArea::getInstance();
     std::vector<int> newTag;
     newTag.push_back(0);

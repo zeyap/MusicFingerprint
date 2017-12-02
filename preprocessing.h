@@ -32,19 +32,29 @@ private:
     QAudioDecoder* decoder;
     int totalscount;
     int SamplePerFrame;
+    int FrameSampleOffset;
 
     QString fpath;
 
     int status,error;
     void start();
 
-    void ClearPCMBuffer();
+    void ClearBuffers();
 
     void bufferData(std::vector<double> data, qint32 N);
     void Framing(std::vector<double> pcmBuffer);
     void FrameProcess(std::vector<double> frame, int fnum);
 
+    void OutputFeatureBuffer();
+
     std::vector<double> pcmBuffer;
+
+    struct FrameFeature{
+        std::vector<int> f;
+        float t;
+    };
+
+    std::vector<FrameFeature> featureBuffer;
 
     LinearTrans* newDFT;
 
