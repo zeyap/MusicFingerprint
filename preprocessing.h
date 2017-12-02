@@ -12,6 +12,7 @@
 #include <QWidget>
 #include <QFile>
 #include <QTextStream>
+#include <QAudioInput>
 #include <iostream>
 #include <vector>
 #include <lineartrans.h>
@@ -23,6 +24,7 @@ class Preprocessing : public QWidget
 public:
     Preprocessing();
     void SetTargetFile(QString newfpath);
+    QAudioFormat getFormat();
 public slots:
     void Decode();
 private slots:
@@ -37,6 +39,7 @@ private:
     int FrameSampleOffset;
 
     QString fpath;
+    QString fpathPrefix="audioSource/";
 
     int status,error;
     void start();

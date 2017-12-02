@@ -3,6 +3,7 @@
 MainWindow::MainWindow()
 {
     preprocessing=new Preprocessing();
+    recorder=new Recorder();
     renderArea=RenderArea::getInstance();
 
     readButton=new QPushButton(tr("read audio"));
@@ -10,8 +11,11 @@ MainWindow::MainWindow()
 
     fileButton=new QPushButton(tr("file"));
     connect(fileButton,SIGNAL(clicked(bool)),this,SLOT(ChooseFile()));
+    fileLabel=new QLabel(tr("Choose a file"));
 
-    fileLabel=new QLabel(tr("Choose a file."));
+    recordButton=new QPushButton(tr("start recording"));
+    connect(recordButton,SIGNAL(clicked(bool)),this,SLOT(RecordSwitch()));
+
 
     QGridLayout *mainLayout =new QGridLayout;
 
@@ -19,6 +23,9 @@ MainWindow::MainWindow()
     mainLayout->addWidget(readButton,1,2);
     mainLayout->addWidget(fileButton,1,1);
     mainLayout->addWidget(fileLabel,1,0,Qt::AlignRight);
+
+    isRecording=false;
+    mainLayout->addWidget(recordButton,2,1);
     setLayout(mainLayout);
 
     resize(1000,600);
@@ -27,6 +34,20 @@ MainWindow::MainWindow()
 void MainWindow::Decode(){
     renderArea->Init();
     preprocessing->Decode();
+}
+
+void MainWindow::RecordSwitch(){
+    if(isRecording==false){
+        recorder->StartRecording();
+        recordButton->setText("stop Recording");
+    }else{
+        recorder->StopRecording();
+        recordButton->setText("start Recording");
+        QString fname=recorder->getRecordingFileName();
+        fileLabel->setText(fname);
+        preprocessing->SetTargetFile(fname);
+    }
+    isRecording=!isRecording;
 }
 
 void MainWindow::ChooseFile(){

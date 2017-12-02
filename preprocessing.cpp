@@ -9,12 +9,7 @@ Preprocessing::Preprocessing()
 
 void Preprocessing::InitDecoder(){
 
-    QAudioFormat format;
-    format.setChannelCount(Channel_Count);
-    format.setSampleSize(Sample_Size);
-    format.setSampleRate(Sample_Rate);
-    format.setCodec("audio/pcm");
-    format.setSampleType(QAudioFormat::SignedInt);
+    QAudioFormat format=getFormat();
 
     decoder->setAudioFormat(format);
 
@@ -26,14 +21,34 @@ void Preprocessing::InitDecoder(){
 
 }
 
+QAudioFormat Preprocessing::getFormat(){
+    QAudioFormat format;
+    format.setChannelCount(Channel_Count);
+    format.setSampleSize(Sample_Size);
+    format.setSampleRate(Sample_Rate);
+    format.setCodec("audio/pcm");
+    format.setSampleType(QAudioFormat::SignedInt);
+
+    format.setByteOrder(QAudioFormat::LittleEndian);
+
+    QAudioDeviceInfo info = QAudioDeviceInfo::defaultInputDevice();
+
+    if (!info.isFormatSupported(format)) {
+       qWarning()<<"default format not supported try to use nearest";
+       format = info.nearestFormat(format);
+    }
+
+    return format;
+}
+
 void Preprocessing::Decode(){
 
     totalscount=0;
 
     ClearBuffers();
 
-    if(QFile::exists(fpath)){
-        decoder->setSourceFilename(fpath);
+    if(QFile::exists(fpathPrefix+fpath)){
+        decoder->setSourceFilename(fpathPrefix+fpath);
         start();
     }else{
         QMessageBox msgBox;

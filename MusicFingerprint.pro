@@ -15,11 +15,13 @@ SOURCES += \
         mainwindow.cpp \
     preprocessing.cpp \
     lineartrans.cpp \
-    renderarea.cpp
+    renderarea.cpp \
+    recorder.cpp
 
 HEADERS += \
         mainwindow.h \
     preprocessing.h \
     lineartrans.h \
     renderarea.h \
-    main.h
+    main.h \
+    recorder.h

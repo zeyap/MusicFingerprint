@@ -51,7 +51,7 @@ void RenderArea::paintEvent(QPaintEvent *){
     w=tags.size()/12*XOffSet;
     h=300;
 
-    painter.setWindow(w*0.005,0,w*1.01,h*1.16);
+    painter.setWindow(w*0.005,0,w*1.01,h*1.1);
 
     if(tags.size()>0){
         for(int i=0;i<tags.size();i+=2){
@@ -91,7 +91,7 @@ void RenderArea::paintEvent(QPaintEvent *){
                 painter.setBrush(brush);
                 painter.setPen(pen);
 
-                painter.drawRect(rectOffsetX,tags[i],XOffSet,XOffSet/2);
+                painter.drawRect(rectOffsetX,tags[i],XOffSet,XOffSet/3);
             }
         }
     }
