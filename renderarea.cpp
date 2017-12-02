@@ -91,7 +91,7 @@ void RenderArea::paintEvent(QPaintEvent *){
                 painter.setBrush(brush);
                 painter.setPen(pen);
 
-                painter.drawRect(rectOffsetX,tags[i],XOffSet,XOffSet);
+                painter.drawRect(rectOffsetX,tags[i],XOffSet,XOffSet/2);
             }
         }
     }

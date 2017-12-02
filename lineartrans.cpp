@@ -35,7 +35,7 @@ void LinearTrans::GenFeatureVector(fftw_complex* out){
         featurev[i][0]=0;//freq
         featurev[i][1]=0;//amp
     }
-    for(int i=0;i<spf;i++){
+    for(int i=0;i<spf/2;i++){
         bandIdx=-1;
         tempf=basef*i;
         if(tempf>30&&tempf<=40){
@@ -50,7 +50,7 @@ void LinearTrans::GenFeatureVector(fftw_complex* out){
             bandIdx=4;
         }
         if(bandIdx!=-1){
-            double amp=out[i][0];
+            double amp=std::sqrt(out[i][0]*out[i][0]+out[i][1]*out[i][1]);
             int db=Amp2dB(amp);
             if(db>featurev[bandIdx][1]){
                 featurev[bandIdx][0]=(int)tempf;
@@ -67,7 +67,7 @@ std::vector<int> LinearTrans::GetFeatureVector(){
     }
     return v;
 }
-\
+
 void LinearTrans::ShowFeature(int fnum){
     renderArea=RenderArea::getInstance();
     std::vector<int> newTag;
