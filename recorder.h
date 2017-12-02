@@ -20,6 +20,36 @@ private:
     QString fpathPrefix="audioSource/newRecording";
     QString fpathSuffix=".raw";
 
+    struct WavFileHeader
+    {
+        // RIFF header
+        char riffName[4];//file Id
+        unsigned long riffLength;//file length
+
+        char wavName[4];//wave Id
+
+        // format chunk - header
+        char fmtName[4];//chunk Id
+        unsigned long fmtLength;//chunk length
+
+        // format chunk - data
+        unsigned short audioFormat;
+        unsigned short channleNumber;
+        unsigned long sampleRate;
+        unsigned long bytesPerSecond;
+        unsigned short bytesPerSample;
+        unsigned short bitsPerSample;
+
+        // data chunk - header
+        char    dataName[4];
+        unsigned long   dataLength;
+
+        // data chunk - data
+        // ...
+    };
+
+    int AddWavHeader();
+
 };
 
 #endif // RECORDER_H
