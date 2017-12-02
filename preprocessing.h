@@ -10,6 +10,8 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QWidget>
+#include <QFile>
+#include <QTextStream>
 #include <iostream>
 #include <vector>
 #include <lineartrans.h>

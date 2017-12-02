@@ -140,5 +140,26 @@ void Preprocessing::SetTargetFile(QString newfpath){
 }
 
 void Preprocessing::OutputFeatureBuffer(){
+    QString filename="featureOutput/"+fpath+".csv";
+    QFile file(filename);
+    if ( file.open(QIODevice::WriteOnly) )
+    {
+        QTextStream stream( &file );
+        stream << "sample size (bit), " << Sample_Size<<", ";
+        stream << "sample rate (Hz), "<<Sample_Rate<<", ";
+        stream << "frame size (sec), "<< Frame_Size<<", ";
+        stream << "frame interval(sec), "<<Frame_Interval;
+        stream<<"\n";
+        int buffersz=featureBuffer.size();
+        int featuresz=featureBuffer[0].f.size();
+        for(int i=0;i<buffersz;i++){
+            for(int j=0;j<featuresz;j++){
+                stream << featureBuffer[i].f[j]<<", ";
+            }
+            stream << featureBuffer[i].t <<", " ;
+            stream << fpath;
+            stream<<"\n";
+        }
 
+    }
 }
