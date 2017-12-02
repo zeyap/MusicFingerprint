@@ -1,6 +1,6 @@
 #include "renderarea.h"
 
-static std::vector<QPoint> pathPoints;
+static std::vector<int> tags;
 static RenderArea* renderArea;
 
 RenderArea::RenderArea(QWidget *parent)
@@ -20,7 +20,7 @@ RenderArea* RenderArea::getInstance(){
 }
 
 void RenderArea::Init(){
-    pathPoints.clear();
+    tags.clear();
 }
 
 
@@ -30,9 +30,9 @@ void RenderArea::mousePressEvent(QMouseEvent *event){
 
 }
 
-void RenderArea::SetPathPoint(std::vector<QPoint> newPath){
+void RenderArea::GetTag(std::vector<int> newTag){
 
-    pathPoints.insert(pathPoints.end(),newPath.begin(),newPath.end());
+    tags.insert(tags.end(),newTag.begin(),newTag.end());
 }
 
 
@@ -40,17 +40,18 @@ void RenderArea::paintEvent(QPaintEvent *){
 
     QColor black=QColor(0,0,0);
     QPainter painter(this);
-
     painter.setPen(QPen(black,0));
 
-    QPainterPath path;
-
-    if(pathPoints.size()>0){
-        path.moveTo(pathPoints[0]);
-        for(int i=0;i<pathPoints.size();i++){
-            path.lineTo(pathPoints[i]);
+    if(tags.size()>0){
+        for(int i=0;i<tags.size();i+=2){
+            if(tags[i]==0){
+                rectOffsetX=tags[i+1]*XOffSet;
+            }else{
+                QBrush brush;
+                brush=QBrush(black,Qt::Dense5Pattern);
+                painter.setBrush(brush);
+                painter.drawRect(rectOffsetX,tags[i],XOffSet,XOffSet);
+            }
         }
     }
-
-    painter.drawPath(path);
 }

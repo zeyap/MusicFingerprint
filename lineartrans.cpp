@@ -3,19 +3,18 @@
 LinearTrans::LinearTrans(std::vector<double> pcmInput, int fnum)
 {
     int N=pcmInput.size();
-    in = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*N);
+    in = (double*)fftw_malloc(sizeof(double)*N);
     for(int i=0;i<N;i++){
-        in[i][0]=pcmInput[i];
-        in[i][1]=0;
+        in[i]=pcmInput[i];
     }
     out = (fftw_complex*)fftw_malloc(sizeof(fftw_complex)*N);
-    p=fftw_plan_dft_1d(N,in,out,FFTW_FORWARD,FFTW_ESTIMATE);
+    p=fftw_plan_dft_r2c_1d(N,in,out,FFTW_ESTIMATE);
 
     FFT();
 
     FindFeatureVector(out);
 
-    Draw(out,N,fnum);
+    ShowTag(fnum);
 
 }
 
@@ -33,7 +32,8 @@ void LinearTrans::FindFeatureVector(fftw_complex* out){
     double tempf;
     int bandIdx;
     for(int i=0;i<5;i++){
-        featurev[i]=0;
+        featurev[i][0]=0;//freq
+        featurev[i][1]=0;//amp
     }
     for(int i=0;i<spf;i++){
         bandIdx=-1;
@@ -46,22 +46,27 @@ void LinearTrans::FindFeatureVector(fftw_complex* out){
             bandIdx=2;
         }else if(tempf>120&&tempf<=180){
             bandIdx=3;
-        }else if(tempf>180&&tempf<=300){
+        }else if(tempf>180&&tempf<=3000){
             bandIdx=4;
         }
         if(bandIdx!=-1){
-            if(std::abs(out[i][0])>featurev[bandIdx]){
-                featurev[bandIdx]=tempf;
+            double amp=out[i][0];
+            if(std::abs(amp)>featurev[bandIdx][1]){
+                featurev[bandIdx][0]=tempf;
+                featurev[bandIdx][1]=amp;
             }
         }
     }
 }
 \
-void LinearTrans::Draw(fftw_complex* out, int N, int fnum){
+void LinearTrans::ShowTag(int fnum){
     renderArea=RenderArea::getInstance();
-    std::vector<QPoint> pathPoint;
-    for(int i=0;i<N;i++){
-        pathPoint.push_back(QPoint(i*XScale+XOffSet+XOffSet*1*fnum,YScale*out[i][0]+YOffSet));
+    std::vector<int> newTag;
+    newTag.push_back(0);
+    newTag.push_back(fnum);
+    for(int i=0;i<5;i++){
+        newTag.push_back(featurev[i][0]);
+        newTag.push_back(featurev[i][1]);
     }
-    renderArea->SetPathPoint(pathPoint);
+    renderArea->GetTag(newTag);
 }

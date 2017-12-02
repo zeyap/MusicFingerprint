@@ -14,12 +14,13 @@ public:
     ~LinearTrans();
     void FFT();
 private:
-    fftw_complex *in, *out;
+    double *in;
+    fftw_complex *out;
     fftw_plan p;
     RenderArea* renderArea;
-    void Draw(fftw_complex* out, int N, int fnum);
+    void ShowTag(int fnum);
     void FindFeatureVector(fftw_complex* out);
-    double featurev[5];
+    double featurev[5][2];//freq+amp
     double basef=1/Frame_Size;//10 //Sample_Rate/(Sample_Rate*Frame_Size);
     int spf=Sample_Rate*Frame_Size;//80
 };

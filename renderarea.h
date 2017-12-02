@@ -21,7 +21,7 @@ public:
     static RenderArea* getInstance();
     int height=50;
     int width=80;
-    void SetPathPoint(std::vector<QPoint> newPath);
+    void GetTag(std::vector<int> newTag);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -30,6 +30,7 @@ protected:
 private:
     RenderArea(QWidget *parent=0);
     static void Init();
+    int rectOffsetX;
 };
 
 #endif // RENDERAREA_H
