@@ -7,6 +7,7 @@
 #include "preprocessing.h"
 #include "renderarea.h"
 #include <QPushButton>
+#include <QScrollBar>
 
 
 class MainWindow : public QWidget
@@ -23,6 +24,7 @@ private slots:
 private:
     RenderArea* renderArea;
     QPushButton* readButton;
+    //QScrollBar* scrollBar;
 };
 
 #endif // MAINWINDOW_H

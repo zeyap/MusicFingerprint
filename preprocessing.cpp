@@ -16,7 +16,7 @@ void Preprocessing::InitDecoder(){
 
     decoder->setAudioFormat(format);
 
-    const QString fname="GOING_STEADY_BABY_BABY.mp3";
+    const QString fname="201305051349262.mp3";
     if(QFile::exists(fname)){
         decoder->setSourceFilename(fname);
     }else{

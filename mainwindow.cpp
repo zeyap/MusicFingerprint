@@ -8,13 +8,19 @@ MainWindow::MainWindow()
     readButton=new QPushButton(tr("read audio"));
     connect(readButton,SIGNAL(clicked(bool)),this,SLOT(Decode()));
 
+    //scrollBar = new QScrollBar(Qt::Horizontal);
+
     QGridLayout *mainLayout =new QGridLayout;
 
-    mainLayout->setRowStretch(0,renderArea->height);
-    resize(800,600);
-    mainLayout->addWidget(renderArea,0,0,renderArea->height,renderArea->width);
+    mainLayout->addWidget(renderArea);
     mainLayout->addWidget(readButton,1,0);
+    //mainLayout->addWidget(scrollBar,2,0);
     setLayout(mainLayout);
+
+    resize(1000,600);
+
+    //connect(scrollBar,SIGNAL(valueChanged(int)),renderArea,SLOT(Move(int)));
+
 }
 
 void MainWindow::Decode(){

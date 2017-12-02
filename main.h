@@ -11,6 +11,6 @@
 #define YOffSet 10
 
 #define XScale 2
-#define YScale 0.0001
+#define YScale 0.5
 
 #endif // MAIN_H

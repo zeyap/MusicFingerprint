@@ -19,9 +19,10 @@ class RenderArea:public QWidget
 
 public:
     static RenderArea* getInstance();
-    int height=50;
-    int width=80;
+
     void GetTag(std::vector<int> newTag);
+public slots:
+    void Move(int x);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;

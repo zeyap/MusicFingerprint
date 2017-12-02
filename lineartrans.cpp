@@ -46,7 +46,7 @@ void LinearTrans::FindFeatureVector(fftw_complex* out){
             bandIdx=2;
         }else if(tempf>120&&tempf<=180){
             bandIdx=3;
-        }else if(tempf>180&&tempf<=3000){
+        }else if(tempf>180&&tempf<=300){
             bandIdx=4;
         }
         if(bandIdx!=-1){
