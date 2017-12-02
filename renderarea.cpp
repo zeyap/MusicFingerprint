@@ -50,7 +50,8 @@ void RenderArea::paintEvent(QPaintEvent *){
     int w,h;
     w=tags.size()/12*XOffSet;
     h=300;
-    painter.setWindow(-w/100,0,w*1.01,h*1.16);
+
+    painter.setWindow(w*0.005,0,w*1.01,h*1.16);
 
     if(tags.size()>0){
         for(int i=0;i<tags.size();i+=2){
@@ -94,8 +95,4 @@ void RenderArea::paintEvent(QPaintEvent *){
             }
         }
     }
-}
-
-void RenderArea::Move(int x){
-    move(x,0);
 }

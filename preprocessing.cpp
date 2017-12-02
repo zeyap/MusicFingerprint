@@ -3,6 +3,8 @@
 Preprocessing::Preprocessing()
 {
     decoder=new QAudioDecoder();
+    fpath="default.mp3";
+    InitDecoder();
 }
 
 void Preprocessing::InitDecoder(){
@@ -16,23 +18,34 @@ void Preprocessing::InitDecoder(){
 
     decoder->setAudioFormat(format);
 
-    const QString fname="201305051349262.mp3";
-    if(QFile::exists(fname)){
-        decoder->setSourceFilename(fname);
-    }else{
-        QMessageBox msgBox;
-        msgBox.setText("No such file named "+fname);
-        msgBox.exec();
-    }
-
     connect(decoder, SIGNAL(finished()), this, SLOT(onFinished()));
     connect(decoder, SIGNAL(bufferReady()), this, SLOT(readBuffer()));
 
     SamplePerFrame=Sample_Rate*Frame_Size;
+
+}
+
+void Preprocessing::Decode(){
+
     totalscount=0;
 
-    start();
+    ClearPCMBuffer();
 
+    if(QFile::exists(fpath)){
+        decoder->setSourceFilename(fpath);
+        start();
+    }else{
+        QMessageBox msgBox;
+        msgBox.setText("No such file named "+fpath);
+        msgBox.exec();
+    }
+
+}
+
+void Preprocessing::ClearPCMBuffer(){
+    while(pcmBuffer.size()>0){
+        pcmBuffer.pop_back();
+    }
 }
 
 void Preprocessing::start(){
@@ -109,4 +122,7 @@ void Preprocessing::FrameProcess(std::vector<double> frame,int fnum){
     delete(newDFT);
 }
 
+void Preprocessing::SetTargetFile(QString newfpath){
+    fpath=newfpath;
+}
 

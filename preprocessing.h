@@ -20,19 +20,25 @@ class Preprocessing : public QWidget
 
 public:
     Preprocessing();
+    void SetTargetFile(QString newfpath);
 public slots:
-    void InitDecoder();
+    void Decode();
 private slots:
     void readBuffer();
     void onFinished();
+    void InitDecoder();
 
 private:
     QAudioDecoder* decoder;
     int totalscount;
     int SamplePerFrame;
 
+    QString fpath;
+
     int status,error;
     void start();
+
+    void ClearPCMBuffer();
 
     void bufferData(std::vector<double> data, qint32 N);
     void Framing(std::vector<double> pcmBuffer);

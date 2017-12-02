@@ -7,7 +7,9 @@
 #include "preprocessing.h"
 #include "renderarea.h"
 #include <QPushButton>
-#include <QScrollBar>
+#include<QLabel>
+#include <QFileInfo>
+#include<QFileDialog>
 
 
 class MainWindow : public QWidget
@@ -20,11 +22,14 @@ public:
     Preprocessing* preprocessing;
 private slots:
     void Decode();
+    void ChooseFile();
 
 private:
     RenderArea* renderArea;
     QPushButton* readButton;
-    //QScrollBar* scrollBar;
+    QPushButton* fileButton;
+    QLabel* fileLabel;
+
 };
 
 #endif // MAINWINDOW_H

@@ -19,10 +19,9 @@ class RenderArea:public QWidget
 
 public:
     static RenderArea* getInstance();
+    static void Init();
 
     void GetTag(std::vector<int> newTag);
-public slots:
-    void Move(int x);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -30,7 +29,6 @@ protected:
 
 private:
     RenderArea(QWidget *parent=0);
-    static void Init();
     int rectOffsetX;
 };
 
