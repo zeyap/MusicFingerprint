@@ -20,9 +20,10 @@ private:
     RenderArea* renderArea;
     void ShowTag(int fnum);
     void FindFeatureVector(fftw_complex* out);
-    double featurev[5][2];//freq+amp
+    int featurev[5][2];//freq+db
     double basef=1/Frame_Size;//10 //Sample_Rate/(Sample_Rate*Frame_Size);
     int spf=Sample_Rate*Frame_Size;//80
+    int Amp2dB(double amp);
 };
 
 #endif // LINEARTRANS_H

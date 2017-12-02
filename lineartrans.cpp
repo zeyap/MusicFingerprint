@@ -51,9 +51,10 @@ void LinearTrans::FindFeatureVector(fftw_complex* out){
         }
         if(bandIdx!=-1){
             double amp=out[i][0];
-            if(std::abs(amp)>featurev[bandIdx][1]){
-                featurev[bandIdx][0]=tempf;
-                featurev[bandIdx][1]=amp;
+            int db=Amp2dB(amp);
+            if(db>featurev[bandIdx][1]){
+                featurev[bandIdx][0]=(int)tempf;
+                featurev[bandIdx][1]=db;
             }
         }
     }
@@ -69,4 +70,10 @@ void LinearTrans::ShowTag(int fnum){
         newTag.push_back(featurev[i][1]);
     }
     renderArea->GetTag(newTag);
+}
+
+int LinearTrans::Amp2dB(double amp){
+//pcm stores amplitude/voltage
+    int dB=(int)20*log10(std::abs(amp));
+    return dB;
 }

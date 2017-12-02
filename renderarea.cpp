@@ -38,9 +38,9 @@ void RenderArea::GetTag(std::vector<int> newTag){
 
 void RenderArea::paintEvent(QPaintEvent *){
 
-    QColor black=QColor(0,0,0);
+    QColor color=QColor(0,200,150);
     QPainter painter(this);
-    painter.setPen(QPen(black,0));
+    painter.setPen(QPen(color,0));
 
     if(tags.size()>0){
         for(int i=0;i<tags.size();i+=2){
@@ -48,7 +48,27 @@ void RenderArea::paintEvent(QPaintEvent *){
                 rectOffsetX=tags[i+1]*XOffSet;
             }else{
                 QBrush brush;
-                brush=QBrush(black,Qt::Dense5Pattern);
+                int dB=tags[i+1];
+                if(dB<=20){
+                    brush=QBrush(color,Qt::Dense6Pattern);
+                }else if(dB<=40){
+                    brush=QBrush(color,Qt::Dense5Pattern);
+                }else if(dB<=80){
+                    brush=QBrush(color,Qt::Dense4Pattern);
+                }
+                else if(dB<=100){
+                    brush=QBrush(color,Qt::Dense3Pattern);
+                }
+                else if(dB<=120){
+                    brush=QBrush(color,Qt::Dense2Pattern);
+                }
+                else if(dB<=140){
+                    brush=QBrush(color,Qt::Dense1Pattern);
+                }
+                else{
+                    brush=QBrush(color,Qt::SolidPattern);
+                }
+
                 painter.setBrush(brush);
                 painter.drawRect(rectOffsetX,tags[i],XOffSet,XOffSet);
             }
