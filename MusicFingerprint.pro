@@ -16,7 +16,9 @@ SOURCES += \
     preprocessing.cpp \
     lineartrans.cpp \
     renderarea.cpp \
-    recorder.cpp
+    recorder.cpp \
+    indexmanager.cpp \
+    search.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -24,4 +26,6 @@ HEADERS += \
     lineartrans.h \
     renderarea.h \
     main.h \
-    recorder.h
+    recorder.h \
+    indexmanager.h \
+    search.h
