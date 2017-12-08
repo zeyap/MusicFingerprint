@@ -7,7 +7,6 @@
 #include <QAudioFormat>
 #include <QAudioDecoder>
 #include <QObject>
-#include <QFile>
 #include <QMessageBox>
 #include <QWidget>
 #include <QFile>
