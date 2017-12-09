@@ -4,48 +4,76 @@
 #include <vector>
 #include <QFile>
 #include <QTextStream>
+#include "main.h"
 
 #define LUT_SIZE 3456
 //3(20~40)*4(50~80)*4(90~120)*6(130~180)*12(190~300)
 
-struct Frame;
-struct Fingerprint;
-struct Song{
+class LUTHeadNode;
+class LUTRecord;
+class Fingerprint;
+
+class SongInfo{
+public:
     int key;
     QString name;
-    std::vector<Fingerprint> pFingerprints;
+};
+
+class SongData{
+    public:
+    std::vector<Fingerprint> fingerprints;
     std::vector<float> fppos;
 };
 
-struct Frame{
-    int songKey;
-    int pos;
-    Frame* next;
+class Fingerprint
+{
+    public:
+    int array[5];
 };
 
-struct Fingerprint
-{
-    int array[5];
-    Frame* pFrames;
-    Frame* pRearFrame;
-};//lookup table
+
+class LUTHeadNode{
+    public:
+    LUTHeadNode(){
+        fingerprintIndex=0;
+        recordCount=0;
+        pRecords=NULL;
+        pRear=NULL;
+    }
+    int fingerprintIndex;
+    int recordCount;
+    LUTRecord* pRecords;
+    LUTRecord* pRear;
+};
+
+class LUTRecord{//LUT
+    public:
+    LUTRecord(){
+        next=NULL;
+    }
+    int songKey;
+    int pos;
+    LUTRecord* next;
+};
+
 
 class IndexManager
 {
 public:
     IndexManager();
-    Fingerprint* LUT;
-    static void WriteSongKeyList(QString fname);
+    LUTHeadNode* LUT;
+    static int WriteSongKeyList(QString fname);
 
 private:
 
     void InitLUT();
     void GenLUT();
+    void WriteLUT();
 
-    std::vector<int> GetSongKeyList();
-    std::vector<Song> GetSongWithKey(int i);
+    std::vector<SongInfo> ReadSongKeyList();
+    SongData ReadSongWithKey(int i);
 
-    int FingerprintToLUTIndex(int m,int n, int p, int q, int k);
+    int FingerprintToLUTIndex(Fingerprint fp);
     std::vector<int> LUTIndexToFingerprint(int i);
 };
 

@@ -4,6 +4,7 @@ MainWindow::MainWindow()
 {
     preprocessing=new Preprocessing();
     recorder=new Recorder();
+    indexManager = new IndexManager();
     renderArea=RenderArea::getInstance();
 
     readButton=new QPushButton(tr("read audio"));

@@ -12,6 +12,7 @@
 #include "preprocessing.h"
 #include "recorder.h"
 #include "renderarea.h"
+#include "indexmanager.h"
 
 class MainWindow : public QWidget
 {
@@ -22,6 +23,7 @@ public:
     //~MainWindow();
     Preprocessing* preprocessing;
     Recorder* recorder;
+    IndexManager* indexManager;
 private slots:
     void Decode();
     void RecordSwitch();

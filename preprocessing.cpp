@@ -155,7 +155,8 @@ void Preprocessing::SetTargetFile(QString newfpath){
 }
 
 void Preprocessing::OutputFeatureBuffer(){
-    QString filename="featureOutput/bySong/"+fpath+".csv";
+    int songIndex=IndexManager::WriteSongKeyList(fpath);
+    QString filename="featureOutput/bySong/"+QString::number(songIndex,10)+".csv";
     QFile file(filename);
     if ( file.open(QIODevice::WriteOnly) )
     {

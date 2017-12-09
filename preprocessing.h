@@ -15,6 +15,7 @@
 #include <iostream>
 #include <vector>
 #include <lineartrans.h>
+#include <indexmanager.h>
 
 class Preprocessing : public QWidget
 {

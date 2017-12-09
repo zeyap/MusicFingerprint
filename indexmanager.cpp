@@ -3,72 +3,157 @@
 IndexManager::IndexManager()
 {
     InitLUT();
-}
-
-void IndexManager::InitLUT(){
-    LUT=new Fingerprint[LUT_SIZE];
-    for (int i=0;i<LUT_SIZE;i++){
-        LUT[i].index=i;
-        std::vector<int> newArray=LUTIndexToFingerprint(i);
-        for(int j=0;j<5;j++){
-            LUT[i].array[j]=newArray[j];
-        }
-        LUT[i].pFrames=NULL;
-        LUT[i].pRearFrame=NULL;
-    }
     GenLUT();
 }
 
-void IndexManager::GenLUT(){
-    std::vector<int> songKeys=GetSongKeyList();
-    for(int i=0;i<songKeys.size();i++){
+void IndexManager::InitLUT(){
 
-        Song* newSong=GetSongWithKey(songKeys[i]);
-        int fpNum=newSong->pFingerprints.size();
+    LUT=new LUTHeadNode[LUT_SIZE];
+
+}
+
+void IndexManager::GenLUT(){
+    std::vector<SongInfo> songsInfo=ReadSongKeyList();
+    for(int i=0;i<songsInfo.size();i++){
+
+        SongData newSongData=ReadSongWithKey(songsInfo[i].key);
+        int fpNum=newSongData.fingerprints.size();
         for (int j=0;j<fpNum;j++){
 
-            Frame newFrame;
-            newFrame.songKey=songKeys[i];
+            LUTRecord* newRecord=new LUTRecord;
+            newRecord->songKey=songsInfo[i].key;
+            newRecord->pos=newSongData.fppos[j];
 
-            newFrame.pos=newSong->fppos[j];
-            newFrame.next=NULL;
+            //Fingerprint x=newSongData.fingerprints[j];
+            int LUTindex=FingerprintToLUTIndex(newSongData.fingerprints[j]);
+            LUT[LUTindex].recordCount++;
 
-            int m,n,p,q,k;
-            m=newSong->pFingerprints[j].array[0];
-            n=newSong->pFingerprints[j].array[1];
-            p=newSong->pFingerprints[j].array[2];
-            q=newSong->pFingerprints[j].array[3];
-            k=newSong->pFingerprints[j].array[4];
-            int LUTindex=FingerprintToLUTIndex(m,n,p,q,k);
-
-            if(LUT[LUTindex].pFrames==NULL){
-                LUT[LUTindex].pFrames=newFrame;
-                LUT[LUTindex].pRearFrame=LUT[LUTindex].pFrames;
+            if(LUT[LUTindex].recordCount==0){
+                LUT[LUTindex].pRecords=newRecord;
+                LUT[LUTindex].pRear=newRecord;
             }else{
-                LUT[LUTindex].pRearFrame->next=newFrame;
+                LUT[LUTindex].pRear->next=newRecord;
+
             }
 
         }
     }
     //Sort songs in a bucket
-    //Write to file
+    WriteLUT();
 }
 
-std::vector<int> IndexManager::GetSongKeyList(){
-
+void IndexManager::WriteLUT(){
+    int i=0;
+    while(LUT+i!=NULL){
+        if(LUT[i].pRecords!=NULL){
+            QString filename="featureOutput/LUT/"+QString::number(i,10)+".csv";
+            QFile file(filename);
+            if ( file.open(QIODevice::WriteOnly) )
+            {
+                QTextStream stream( &file );
+                LUTRecord* pRecord;
+                pRecord=LUT[i].pRecords;
+                while(pRecord!=NULL){
+                    stream << pRecord->songKey<<", ";
+                    stream <<pRecord->pos<<"\n";
+                    pRecord=pRecord->next;
+                }
+            }
+        }
+    }
 }
 
-std::vector<Song> IndexManager::GetSongWithKey(int i){
+int IndexManager:: WriteSongKeyList(QString fname){
+    QString filename="featureOutput/SongKeyList.csv";
+    QFile file(filename);
+    int songIndex=0;
+    if ( file.open(QIODevice::Append) )
+    {
+        //check repetition
+        QTextStream stream( &file );
+        while(1){
+            QString tline=stream.readLine();
+            if(tline==NULL)
+                break;
+            QStringList tlineList=tline.split(",",QString::SkipEmptyParts);
+            QString record1=tlineList.at(0);
+            bool ok;
+            int tindex=record1.toInt(&ok, 10);
+            if(songIndex==tindex){
+                songIndex++;
+            }else{
+                break;
+            }
+        }
 
+        stream << songIndex<<", ";
+        stream <<fname<<", ";
+        stream<<"\n";
+    }
+    return songIndex;
 }
 
-int IndexManager::FingerprintToLUTIndex(int m,int n, int p, int q, int k){
+std::vector<SongInfo> IndexManager::ReadSongKeyList(){
+    std::vector<SongInfo> songsInfo;
+    QString filename="featureOutput/SongKeyList.csv";
+    QFile file(filename);
+    if ( file.open(QIODevice::ReadOnly) )
+    {
+        QTextStream stream( &file );
+        while(1){
+            QString tline=stream.readLine();
+            if(tline==NULL)
+                break;
+            QStringList tlineList=tline.split(",",QString::SkipEmptyParts);
+            QString record1=tlineList.at(0);
+            bool ok;
+            int tindex=record1.toInt(&ok, 10);
+            QString songName=tlineList.at(1);
+            SongInfo newSongInfo;
+            newSongInfo.key=tindex;
+            newSongInfo.name=songName;
+            songsInfo.push_back(newSongInfo);
+        }
+    }
+    return songsInfo;
+}
+
+SongData IndexManager::ReadSongWithKey(int i){
+    SongData newSongData;
+    QString filename="featureOutput/bySong/"+QString::number(i,10)+".csv";
+    QFile file(filename);
+    if ( file.open(QIODevice::ReadOnly) ){
+        QTextStream stream( &file );
+        while(1){
+            QString tline=stream.readLine();
+            if(tline==NULL)
+                break;
+            QStringList tlineList=tline.split(",",QString::SkipEmptyParts);
+            QString record[6];
+            Fingerprint newFp;
+            for(int j=0;j<5;j++){
+                record[j]=tlineList.at(j);
+                bool ok;
+                int tindex=record[j].toInt(&ok,10);
+                newFp.array[j]=tindex;
+            }
+            record[5]=tlineList.at(5);
+            float tpos=record[5].toFloat();
+            newSongData.fingerprints.push_back(newFp);
+            newSongData.fppos.push_back(tpos);
+        }
+    }
+    return newSongData;
+}
+
+int IndexManager::FingerprintToLUTIndex(Fingerprint fp){
     int i[5];
-    i[0]=(m-20)/10;//最高位
-    i[1]=(n-50)/10;
-    i[2]=(p-90)/10;
-    i[3]=(q-130)/10;
-    i[4]=(k-190)/10;//最低位
+
+    i[0]=(fp.array[0]-20)/10;//最高位
+    i[1]=(fp.array[1]-50)/10;
+    i[2]=(fp.array[2]-90)/10;
+    i[3]=(fp.array[3]-130)/10;
+    i[4]=(fp.array[4]-190/10);//最低位
 
     return (((i[0]*4+i[1])*4+i[2])*6+i[3])*12+i[4];
 }
@@ -87,25 +172,4 @@ std::vector<int> IndexManager::LUTIndexToFingerprint(int i){
     fp.push_back(n);
     fp.push_back(m);
     return fp;
-}
-
-void IndexManager:: WriteSongKeyList(QString fname){
-    int fileIndex=GenFileIndex(fname);
-    QString filename="featureOutput/SongKeyList"+QString::number(fileIndex,10)+".csv";
-    QFile file(filename);
-    if ( file.open(QIODevice::ReadWrite) )
-    {
-        //check repetition
-        QTextStream stream( &file );
-        stream << songIndex<<", ";
-        stream <<fname<<", ";
-        stream<<"\n";
-
-    }
-}
-
-int IndexManager::GenFileIndex(QString fname){
-    int newFileIndex;
-    QStringList list=fname.split("",QString::SkipEmptyParts);
-    return newFileIndex;
 }
