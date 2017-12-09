@@ -19,23 +19,20 @@ void IndexManager::GenLUT(){
         SongData newSongData=ReadSongWithKey(songsInfo[i].key);
         int fpNum=newSongData.fingerprints.size();
         for (int j=0;j<fpNum;j++){
-
             LUTRecord* newRecord=new LUTRecord;
             newRecord->songKey=songsInfo[i].key;
             newRecord->pos=newSongData.fppos[j];
 
-            //Fingerprint x=newSongData.fingerprints[j];
             int LUTindex=FingerprintToLUTIndex(newSongData.fingerprints[j]);
-            LUT[LUTindex].recordCount++;
 
+            LUTHeadNode x=LUT[LUTindex];
             if(LUT[LUTindex].recordCount==0){
                 LUT[LUTindex].pRecords=newRecord;
                 LUT[LUTindex].pRear=newRecord;
             }else{
                 LUT[LUTindex].pRear->next=newRecord;
-
             }
-
+            LUT[LUTindex].recordCount++;
         }
     }
     //Sort songs in a bucket
@@ -43,9 +40,8 @@ void IndexManager::GenLUT(){
 }
 
 void IndexManager::WriteLUT(){
-    int i=0;
-    while(LUT+i!=NULL){
-        if(LUT[i].pRecords!=NULL){
+    for(int i=0;i<LUT_SIZE;i++){
+        if(LUT[i].recordCount!=0){
             QString filename="featureOutput/LUT/"+QString::number(i,10)+".csv";
             QFile file(filename);
             if ( file.open(QIODevice::WriteOnly) )
@@ -67,7 +63,7 @@ int IndexManager:: WriteSongKeyList(QString fname){
     QString filename="featureOutput/SongKeyList.csv";
     QFile file(filename);
     int songIndex=0;
-    if ( file.open(QIODevice::Append) )
+    if ( file.open(QIODevice::ReadWrite) )
     {
         //check repetition
         QTextStream stream( &file );
@@ -75,11 +71,16 @@ int IndexManager:: WriteSongKeyList(QString fname){
             QString tline=stream.readLine();
             if(tline==NULL)
                 break;
-            QStringList tlineList=tline.split(",",QString::SkipEmptyParts);
+            QStringList tlineList=tline.split(", ",QString::SkipEmptyParts);
             QString record1=tlineList.at(0);
+            QString tname=tlineList.at(1);
             bool ok;
             int tindex=record1.toInt(&ok, 10);
             if(songIndex==tindex){
+                if(tname==fname){
+                    return -1;//already exist
+                    break;
+                }
                 songIndex++;
             }else{
                 break;
@@ -124,6 +125,7 @@ SongData IndexManager::ReadSongWithKey(int i){
     QFile file(filename);
     if ( file.open(QIODevice::ReadOnly) ){
         QTextStream stream( &file );
+        stream.readLine();//skip head line
         while(1){
             QString tline=stream.readLine();
             if(tline==NULL)
@@ -149,18 +151,22 @@ SongData IndexManager::ReadSongWithKey(int i){
 int IndexManager::FingerprintToLUTIndex(Fingerprint fp){
     int i[5];
 
-    i[0]=(fp.array[0]-20)/10;//最高位
+    if(fp.array[0]==0){
+        return LUT_SIZE-1;
+    }
+
+    i[0]=(fp.array[0]-30)/10;//最高位
     i[1]=(fp.array[1]-50)/10;
     i[2]=(fp.array[2]-90)/10;
     i[3]=(fp.array[3]-130)/10;
-    i[4]=(fp.array[4]-190/10);//最低位
+    i[4]=(fp.array[4]-190)/10;//最低位
 
     return (((i[0]*4+i[1])*4+i[2])*6+i[3])*12+i[4];
 }
 
 std::vector<int> IndexManager::LUTIndexToFingerprint(int i){
     std::vector<int> fp;
-    int m,n,p,q,k;//3 4 4 6 12
+    int m,n,p,q,k;//2 4 4 6 12
     m=(i/(4*4*6*12))%3*10+20;
     n=(i/(4*6*12))%4*10+50;
     p=(i/(6*12))%4*10+90;

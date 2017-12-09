@@ -6,8 +6,8 @@
 #include <QTextStream>
 #include "main.h"
 
-#define LUT_SIZE 3456
-//3(20~40)*4(50~80)*4(90~120)*6(130~180)*12(190~300)
+#define LUT_SIZE 2305
+//2(30~40)*4(50~80)*4(90~120)*6(130~180)*12(190~300)+1
 
 class LUTHeadNode;
 class LUTRecord;
@@ -52,7 +52,7 @@ class LUTRecord{//LUT
         next=NULL;
     }
     int songKey;
-    int pos;
+    float pos;
     LUTRecord* next;
 };
 
