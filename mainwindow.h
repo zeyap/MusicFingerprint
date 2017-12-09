@@ -28,6 +28,7 @@ private slots:
     void Decode();
     void RecordSwitch();
     void ChooseFile();
+    void Search();
 
 private:
     RenderArea* renderArea;
@@ -38,6 +39,8 @@ private:
     QLabel* fileLabel;
 
     QPushButton* recordButton;
+    QPushButton* searchButton;
+    QLabel* searchLabel;
     bool isRecording;
 
 };

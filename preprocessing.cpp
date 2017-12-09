@@ -3,7 +3,7 @@
 Preprocessing::Preprocessing()
 {
     decoder=new QAudioDecoder();
-    fpath="default.mp3";
+    fpath="null";
     InitDecoder();
 }
 

@@ -12,24 +12,33 @@ MainWindow::MainWindow()
 
     fileButton=new QPushButton(tr("file"));
     connect(fileButton,SIGNAL(clicked(bool)),this,SLOT(ChooseFile()));
-    fileLabel=new QLabel(tr("Choose a file"));
+    fileLabel=new QLabel(tr("Add a new song to library"));
 
     recordButton=new QPushButton(tr("start recording"));
     connect(recordButton,SIGNAL(clicked(bool)),this,SLOT(RecordSwitch()));
 
+    searchButton=new QPushButton(tr("search"));
+    connect(searchButton,SIGNAL(clicked(bool)),this,SLOT(Search()));
+
+    searchLabel=new QLabel(tr("[SEARCH YOUR MUSIC]"));
 
     QGridLayout *mainLayout =new QGridLayout;
 
     mainLayout->addWidget(renderArea,0,0,1,3);
-    mainLayout->addWidget(readButton,1,2);
-    mainLayout->addWidget(fileButton,1,1);
-    mainLayout->addWidget(fileLabel,1,0,Qt::AlignRight);
+
+    mainLayout->addWidget(recordButton,1,1);
+    mainLayout->addWidget(searchButton,1,2);
+    mainLayout->addWidget(searchLabel,1,0,Qt::AlignRight);
+
+    mainLayout->addWidget(readButton,2,2);
+    mainLayout->addWidget(fileButton,2,1);
+    mainLayout->addWidget(fileLabel,2,0,Qt::AlignRight);
 
     isRecording=false;
-    mainLayout->addWidget(recordButton,2,1);
+
     setLayout(mainLayout);
 
-    resize(1000,600);
+    resize(500,300);
 }
 
 void MainWindow::Decode(){
@@ -45,8 +54,6 @@ void MainWindow::RecordSwitch(){
         recorder->StopRecording();
         recordButton->setText("start Recording");
         QString fname=recorder->getRecordingFileName();
-        fileLabel->setText(fname);
-        preprocessing->SetTargetFile(fname);
     }
     isRecording=!isRecording;
 }
@@ -63,3 +70,6 @@ void MainWindow::ChooseFile(){
     preprocessing->SetTargetFile(file_path);
 }
 
+void MainWindow::Search(){
+
+}

@@ -17,7 +17,7 @@ private:
     int serial;
     QAudioFormat format;
 
-    QString fpathPrefix="audioSource/newRecording";
+    QString fpathPrefix="recordings/newRecording";
     QString fpathSuffix=".raw";
 
     struct WavFileHeader
