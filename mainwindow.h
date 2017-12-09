@@ -28,7 +28,7 @@ private slots:
     void Decode();
     void RecordSwitch();
     void ChooseFile();
-    void Search();
+    void StartSearch();
 
 private:
     RenderArea* renderArea;

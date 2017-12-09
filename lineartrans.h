@@ -6,11 +6,12 @@
 #include <renderarea.h>
 #include <QPoint>
 #include "main.h"
+#include "search.h"
 
 class LinearTrans
 {
 public:
-    LinearTrans(std::vector<double> pcmInput, int fnum);
+    LinearTrans(std::vector<double> pcmInput, int fnum, int audioType);
     ~LinearTrans();
     std::vector<int> GetFeatureVector();
 private:

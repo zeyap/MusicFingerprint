@@ -18,7 +18,7 @@ MainWindow::MainWindow()
     connect(recordButton,SIGNAL(clicked(bool)),this,SLOT(RecordSwitch()));
 
     searchButton=new QPushButton(tr("search"));
-    connect(searchButton,SIGNAL(clicked(bool)),this,SLOT(Search()));
+    connect(searchButton,SIGNAL(clicked(bool)),this,SLOT(StartSearch()));
 
     searchLabel=new QLabel(tr("[SEARCH YOUR MUSIC]"));
 
@@ -43,7 +43,7 @@ MainWindow::MainWindow()
 
 void MainWindow::Decode(){
     renderArea->Init();
-    preprocessing->Decode();
+    preprocessing->Decode(1);
 }
 
 void MainWindow::RecordSwitch(){
@@ -54,6 +54,7 @@ void MainWindow::RecordSwitch(){
         recorder->StopRecording();
         recordButton->setText("start Recording");
         QString fname=recorder->getRecordingFileName();
+        preprocessing->SetTargetFile(fname);
     }
     isRecording=!isRecording;
 }
@@ -70,6 +71,7 @@ void MainWindow::ChooseFile(){
     preprocessing->SetTargetFile(file_path);
 }
 
-void MainWindow::Search(){
-
+void MainWindow::StartSearch(){
+    renderArea->Init();
+    preprocessing->Decode(0);
 }

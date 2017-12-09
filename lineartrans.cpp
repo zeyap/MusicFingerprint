@@ -1,6 +1,6 @@
 #include "lineartrans.h"
 
-LinearTrans::LinearTrans(std::vector<double> pcmInput, int fnum)
+LinearTrans::LinearTrans(std::vector<double> pcmInput, int fnum, int audioType)
 {
     int N=pcmInput.size();
     in = (double*)fftw_malloc(sizeof(double)*N);
@@ -14,7 +14,12 @@ LinearTrans::LinearTrans(std::vector<double> pcmInput, int fnum)
 
     GenFeatureVector(out);
 
-    ShowFeature(fnum);
+    if(audioType==1){
+        ShowFeature(fnum);
+    }else if(audioType==0){
+        Search* newSearch=new Search();
+    }
+
 
 }
 

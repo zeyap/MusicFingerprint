@@ -41,11 +41,18 @@ QAudioFormat Preprocessing::getFormat(){
     return format;
 }
 
-void Preprocessing::Decode(){
+void Preprocessing::Decode(int newAudioType){
 
     totalscount=0;
+    audioType=newAudioType;
 
     ClearBuffers();
+    if(audioType==1){
+        fpathPrefix="audioSource/";
+    }else{
+        fpathPrefix="recordings/";
+    }
+
 
     if(QFile::exists(fpathPrefix+fpath)){
         decoder->setSourceFilename(fpathPrefix+fpath);
@@ -139,7 +146,7 @@ void Preprocessing::Framing(std::vector<double> pcmBuffer){
 
 void Preprocessing::FrameProcess(std::vector<double> frame,int fnum){
     int n=frame.size();
-    newDFT=new LinearTrans(frame,fnum);
+    newDFT=new LinearTrans(frame,fnum,audioType);
 
     FrameFeature newf;
     newf.f=newDFT->GetFeatureVector();

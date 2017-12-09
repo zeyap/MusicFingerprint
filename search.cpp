@@ -4,3 +4,7 @@ Search::Search()
 {
 
 }
+
+void Search::Init(){
+
+}

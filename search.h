@@ -6,6 +6,7 @@ class Search
 {
 public:
     Search();
+    void Init();
 };
 
 #endif // SEARCH_H

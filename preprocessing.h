@@ -26,7 +26,7 @@ public:
     void SetTargetFile(QString newfpath);
     QAudioFormat getFormat();
 public slots:
-    void Decode();
+    void Decode(int newAudioType);
 private slots:
     void readBuffer();
     void onFinished();
@@ -39,7 +39,7 @@ private:
     int FrameSampleOffset;
 
     QString fpath;
-    QString fpathPrefix="audioSource/";
+    QString fpathPrefix;
 
     int status,error;
     void start();
@@ -62,6 +62,8 @@ private:
     std::vector<FrameFeature> featureBuffer;
 
     LinearTrans* newDFT;
+
+    int audioType;//0 record, 1 full-music
 
 };
 
