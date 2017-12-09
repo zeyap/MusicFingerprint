@@ -25,7 +25,6 @@ void IndexManager::GenLUT(){
 
             int LUTindex=FingerprintToLUTIndex(newSongData.fingerprints[j]);
 
-            LUTHeadNode x=LUT[LUTindex];
             if(LUT[LUTindex].recordCount==0){
                 LUT[LUTindex].pRecords=newRecord;
                 LUT[LUTindex].pRear=newRecord;
@@ -58,6 +57,7 @@ void IndexManager::WriteLUT(){
         }
     }
 }
+
 
 int IndexManager:: WriteSongKeyList(QString fname){
     QString filename="featureOutput/SongKeyList.csv";

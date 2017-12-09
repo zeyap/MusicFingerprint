@@ -25,6 +25,7 @@ public:
     Preprocessing();
     void SetTargetFile(QString newfpath);
     QAudioFormat getFormat();
+
 public slots:
     void Decode(int newAudioType);
 private slots:
@@ -54,14 +55,7 @@ private:
 
     std::vector<double> pcmBuffer;
 
-    struct FrameFeature{
-        std::vector<int> f;
-        float t;
-    };
-
     std::vector<FrameFeature> featureBuffer;
-
-    LinearTrans* newDFT;
 
     int audioType;//0 record, 1 full-music
 

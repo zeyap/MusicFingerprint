@@ -16,8 +16,6 @@ LinearTrans::LinearTrans(std::vector<double> pcmInput, int fnum, int audioType)
 
     if(audioType==1){
         ShowFeature(fnum);
-    }else if(audioType==0){
-        Search* newSearch=new Search();
     }
 
 

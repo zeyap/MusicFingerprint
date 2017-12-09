@@ -122,7 +122,12 @@ void Preprocessing::onFinished(){
 
     Framing(pcmBuffer);
 
-    OutputFeatureBuffer();
+    if(audioType==1){
+        OutputFeatureBuffer();
+    }else if(audioType==0){
+        Search newSearch(featureBuffer);
+    }
+
 }
 
 void Preprocessing::Framing(std::vector<double> pcmBuffer){
@@ -146,15 +151,16 @@ void Preprocessing::Framing(std::vector<double> pcmBuffer){
 
 void Preprocessing::FrameProcess(std::vector<double> frame,int fnum){
     int n=frame.size();
-    newDFT=new LinearTrans(frame,fnum,audioType);
+    LinearTrans* newDFT=new LinearTrans(frame,fnum,audioType);
 
     FrameFeature newf;
-    newf.f=newDFT->GetFeatureVector();
+    std::vector<int> v=newDFT->GetFeatureVector();
+    for(int i=0;i<Feature_Size;i++){
+        newf.f.array[i]=v[i];
+    }
     newf.t=fnum*Frame_Interval;
 
     featureBuffer.push_back(newf);
-
-    delete(newDFT);
 }
 
 void Preprocessing::SetTargetFile(QString newfpath){
@@ -177,10 +183,9 @@ void Preprocessing::OutputFeatureBuffer(){
         stream << "frame interval(sec), "<<Frame_Interval;
         stream<<"\n";
         int buffersz=featureBuffer.size();
-        int featuresz=featureBuffer[0].f.size();
         for(int i=0;i<buffersz;i++){
-            for(int j=0;j<featuresz;j++){
-                stream << featureBuffer[i].f[j]<<", ";
+            for(int j=0;j<Feature_Size;j++){
+                stream << featureBuffer[i].f.array[j]<<", ";
             }
             stream << featureBuffer[i].t <<", " ;
             stream << fpath;

@@ -12,5 +12,18 @@
 
 #define XScale 2
 #define YScale 0.5
+#define Feature_Size 5
+
+class Fingerprint
+{
+    public:
+    int array[Feature_Size];
+};
+
+class FrameFeature{
+public:
+    Fingerprint f;
+    float t;
+};
 
 #endif // MAIN_H

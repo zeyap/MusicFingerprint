@@ -25,12 +25,6 @@ class SongData{
     std::vector<float> fppos;
 };
 
-class Fingerprint
-{
-    public:
-    int array[5];
-};
-
 
 class LUTHeadNode{
     public:
@@ -51,6 +45,11 @@ class LUTRecord{//LUT
     LUTRecord(){
         next=NULL;
     }
+    LUTRecord(int newSongKey,float newPos){
+        songKey=newSongKey;
+        pos=newPos;
+        next=NULL;
+    }
     int songKey;
     float pos;
     LUTRecord* next;
@@ -63,6 +62,8 @@ public:
     IndexManager();
     LUTHeadNode* LUT;
     static int WriteSongKeyList(QString fname);
+    static int FingerprintToLUTIndex(Fingerprint fp);
+    static LUTHeadNode ReadLUT(int i);
 
 private:
 
@@ -73,8 +74,7 @@ private:
     std::vector<SongInfo> ReadSongKeyList();
     SongData ReadSongWithKey(int i);
 
-    int FingerprintToLUTIndex(Fingerprint fp);
-    std::vector<int> LUTIndexToFingerprint(int i);
+    static std::vector<int> LUTIndexToFingerprint(int i);
 };
 
 #endif // INDEXMANAGER_H
