@@ -14,10 +14,7 @@ LinearTrans::LinearTrans(std::vector<double> pcmInput, int fnum, int audioType)
 
     GenFeatureVector(out);
 
-    if(audioType==1){
-        ShowFeature(fnum);
-    }
-
+    ShowFeature(fnum);
 
 }
 

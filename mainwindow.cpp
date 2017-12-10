@@ -24,13 +24,11 @@ MainWindow::MainWindow()
     updateButton=new QPushButton(tr("update library"));
     connect(updateButton,SIGNAL(clicked(bool)),this,SLOT(UpdateLibrary()));
 
-    console = new QLabel(tr(""));
     connect(preprocessing,SIGNAL(SearchDone(QString)),this,SLOT(DisplaySearchResult(QString)));
 
     QGridLayout *mainLayout =new QGridLayout;
 
     mainLayout->addWidget(renderArea,0,0,1,4);
-    mainLayout->addWidget(console,0,0,1,4,Qt::AlignCenter);
 
     mainLayout->addWidget(recordButton,1,1);
     mainLayout->addWidget(searchButton,1,2);
@@ -56,6 +54,7 @@ void MainWindow::Decode(){
 }
 
 void MainWindow::RecordSwitch(){
+
     if(isRecording==false){
         recorder->StartRecording();
         recordButton->setText("stop Recording");
@@ -87,7 +86,9 @@ void MainWindow::StartSearch(){
 }
 
 void MainWindow::DisplaySearchResult(QString res){
-    console->setText(res);
+    QMessageBox msgBox;
+    msgBox.setText(res);
+    msgBox.exec();
 }
 
 void MainWindow::UpdateLibrary(){

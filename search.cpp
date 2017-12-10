@@ -64,7 +64,7 @@ QString Search::RankCandidates(){
     for(int i=0;i<candidateNum;i++){
         int peak=FindPeak(candidates[i].tOffsetHistogram);
         int matchNum=candidates[i].matchingNum;
-        dist[i].d=featureNum*matchNum/(1.0f*peak*peak);
+        dist[i].d=featureNum*featureNum/(1.0f*peak*matchNum);
         dist[i].songIndex=candidates[i].index;
     }
     candidates.clear();

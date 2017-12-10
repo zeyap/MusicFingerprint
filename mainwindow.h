@@ -50,8 +50,6 @@ private:
 
     QPushButton* updateButton;
 
-    QLabel* console;
-
 };
 
 #endif // MAINWINDOW_H
