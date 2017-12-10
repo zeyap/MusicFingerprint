@@ -29,8 +29,11 @@ private slots:
     void RecordSwitch();
     void ChooseFile();
     void StartSearch();
+    void UpdateLibrary();
 
 private:
+    void DisableUpdate();
+    void EnableUpdate();
     RenderArea* renderArea;
 
     QPushButton* readButton;
@@ -42,6 +45,9 @@ private:
     QPushButton* searchButton;
     QLabel* searchLabel;
     bool isRecording;
+    bool isLibraryToBeUpdated;
+
+    QPushButton* updateButton;
 
 };
 

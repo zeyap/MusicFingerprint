@@ -4,7 +4,6 @@ MainWindow::MainWindow()
 {
     preprocessing=new Preprocessing();
     recorder=new Recorder();
-    indexManager = new IndexManager();
     renderArea=RenderArea::getInstance();
 
     readButton=new QPushButton(tr("read audio"));
@@ -22,9 +21,12 @@ MainWindow::MainWindow()
 
     searchLabel=new QLabel(tr("[SEARCH YOUR MUSIC]"));
 
+    updateButton=new QPushButton(tr("update library"));
+    connect(updateButton,SIGNAL(clicked(bool)),this,SLOT(UpdateLibrary()));
+
     QGridLayout *mainLayout =new QGridLayout;
 
-    mainLayout->addWidget(renderArea,0,0,1,3);
+    mainLayout->addWidget(renderArea,0,0,1,4);
 
     mainLayout->addWidget(recordButton,1,1);
     mainLayout->addWidget(searchButton,1,2);
@@ -32,18 +34,21 @@ MainWindow::MainWindow()
 
     mainLayout->addWidget(readButton,2,2);
     mainLayout->addWidget(fileButton,2,1);
+    mainLayout->addWidget(updateButton,2,3);
     mainLayout->addWidget(fileLabel,2,0,Qt::AlignRight);
 
     isRecording=false;
+    EnableUpdate();
 
     setLayout(mainLayout);
 
-    resize(500,300);
+    resize(600,300);
 }
 
 void MainWindow::Decode(){
     renderArea->Init();
     preprocessing->Decode(1);
+    EnableUpdate();
 }
 
 void MainWindow::RecordSwitch(){
@@ -74,4 +79,22 @@ void MainWindow::ChooseFile(){
 void MainWindow::StartSearch(){
     renderArea->Init();
     preprocessing->Decode(0);
+}
+
+void MainWindow::UpdateLibrary(){
+    if(isLibraryToBeUpdated){
+        indexManager = new IndexManager();
+        DisableUpdate();
+    }
+
+}
+
+void MainWindow::EnableUpdate(){
+    isLibraryToBeUpdated=true;
+    updateButton->setText(tr("update library"));
+}
+
+void MainWindow::DisableUpdate(){
+    isLibraryToBeUpdated=false;
+    updateButton->setText(tr("library updated"));
 }
