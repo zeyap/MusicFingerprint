@@ -22,6 +22,7 @@ void Recorder::StartRecording(){
     if(!outputFile->open( QIODevice::WriteOnly | QIODevice::Truncate )){
         return;
     }
+    outputFile->close();
     audio = new QAudioInput(format, this);
     audio->start(outputFile);
 }

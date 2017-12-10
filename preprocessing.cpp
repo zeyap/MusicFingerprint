@@ -193,4 +193,5 @@ void Preprocessing::OutputFeatureBuffer(){
             stream<<"\n";
         }
     }
+    file.close();
 }

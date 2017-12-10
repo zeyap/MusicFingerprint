@@ -6,8 +6,8 @@
 #include <QTextStream>
 #include "main.h"
 
-#define LUT_SIZE 2305
-//2(30~40)*4(50~80)*4(90~120)*6(130~180)*12(190~300)+1
+#define LUT_SIZE 6826
+//3(30~40+blank)*5(50~80+blank)*5(90~120+blank)*7(130~180+blank)*13(190~300+blank)+1
 
 class LUTHeadNode;
 class LUTRecord;
@@ -75,6 +75,7 @@ private:
     SongData ReadSongWithKey(int i);
 
     static std::vector<int> LUTIndexToFingerprint(int i);
+
 };
 
 #endif // INDEXMANAGER_H

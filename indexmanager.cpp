@@ -54,6 +54,7 @@ void IndexManager::WriteLUT(){
                     pRecord=pRecord->next;
                 }
             }
+            file.close();
         }
     }
 }
@@ -91,6 +92,7 @@ int IndexManager:: WriteSongKeyList(QString fname){
         stream <<fname<<", ";
         stream<<"\n";
     }
+    file.close();
     return songIndex;
 }
 
@@ -116,6 +118,7 @@ std::vector<SongInfo> IndexManager::ReadSongKeyList(){
             songsInfo.push_back(newSongInfo);
         }
     }
+    file.close();
     return songsInfo;
 }
 
@@ -145,33 +148,40 @@ SongData IndexManager::ReadSongWithKey(int i){
             newSongData.fppos.push_back(tpos);
         }
     }
+    file.close();
     return newSongData;
 }
 
 int IndexManager::FingerprintToLUTIndex(Fingerprint fp){
-    int i[5];
+    int i[Feature_Size];
 
-    if(fp.array[0]==0){
-        return LUT_SIZE-1;
+    const int bandLowerBounds[5]={30,50,90,130,190};
+    const int offsets[5]={3,5,5,7,13};
+
+    for(int j=0;j<Feature_Size;j++){
+        if(fp.array[j]==0){
+            i[j]=offsets[j]-1;
+        }else{
+            i[j]=(fp.array[j]-bandLowerBounds[j])/10;
+        }
     }
 
-    i[0]=(fp.array[0]-30)/10;//最高位
-    i[1]=(fp.array[1]-50)/10;
-    i[2]=(fp.array[2]-90)/10;
-    i[3]=(fp.array[3]-130)/10;
-    i[4]=(fp.array[4]-190)/10;//最低位
+    int res=(((i[0]*offsets[1]+i[1])*offsets[2]+i[2])*offsets[3]+i[3])*offsets[4]+i[4];
+    if(res<0){
+        return -1;
+    }
 
-    return (((i[0]*4+i[1])*4+i[2])*6+i[3])*12+i[4];
+    return res;
 }
 
 std::vector<int> IndexManager::LUTIndexToFingerprint(int i){
     std::vector<int> fp;
-    int m,n,p,q,k;//2 4 4 6 12
-    m=(i/(4*4*6*12))%3*10+20;
-    n=(i/(4*6*12))%4*10+50;
-    p=(i/(6*12))%4*10+90;
-    q=(i/12)%6*10+130;
-    k=i%12*10+190;
+    int m,n,p,q,k;
+    m=(i/(5*5*7*13))%3*10+20;
+    n=(i/(5*7*13))%4*10+50;
+    p=(i/(7*13))%4*10+90;
+    q=(i/13)%6*10+130;
+    k=i%13*10+190;
     fp.push_back(k);
     fp.push_back(q);
     fp.push_back(p);

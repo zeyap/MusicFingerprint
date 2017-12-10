@@ -41,7 +41,7 @@ void LinearTrans::GenFeatureVector(fftw_complex* out){
     for(int i=0;i<spf/2;i++){
         bandIdx=-1;
         tempf=basef*i;
-        if(tempf>30&&tempf<=40){
+        if(tempf>=30&&tempf<=40){
             bandIdx=0;
         }else if(tempf>40&&tempf<=80){
             bandIdx=1;

@@ -65,6 +65,7 @@ void MainWindow::RecordSwitch(){
         QString fname=recorder->getRecordingFileName();
         preprocessing->SetTargetFile(fname);
     }
+
     isRecording=!isRecording;
 }
 

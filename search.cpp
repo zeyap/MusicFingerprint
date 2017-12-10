@@ -43,14 +43,15 @@ void Search::GenCandidates(std::vector<FrameFeature> featureBuffer){
                     candidateNum++;
                 }
 
-                if(lastSongIndex!=tSongIndex){
+
                     candidates[candidateIndexLookUpTable[tSongIndex]].matchingNum++;
-                }
+
 
                 candidates[candidateIndexLookUpTable[tSongIndex]].tOffsetHistogram[tPosOnHistogram]++;
                 lastSongIndex=tSongIndex;
             }
         }
+        file.close();
 
     }
 }
@@ -63,7 +64,7 @@ QString Search::RankCandidates(){
     for(int i=0;i<candidateNum;i++){
         int peak=FindPeak(candidates[i].tOffsetHistogram);
         int matchNum=candidates[i].matchingNum;
-        dist[i].d=featureNum*featureNum/1.0f*(peak*matchNum);
+        dist[i].d=featureNum*matchNum/(1.0f*peak*peak);
         dist[i].songIndex=candidates[i].index;
     }
     candidates.clear();
@@ -72,7 +73,7 @@ QString Search::RankCandidates(){
 }
 
 QString Search::FormattingResult(std::vector<CandidateDistance> res){
-    QString out="SongName\tDistance\n";
+    QString out="Distance\t\tSongName\n";
     std::vector<SongInfo> songKeyList=IndexManager::ReadSongKeyList();
     for(int i=res.size()-1;i>=0;i--){
         out+=QString::number(res[i].d);
