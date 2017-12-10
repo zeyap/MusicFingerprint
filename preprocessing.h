@@ -28,6 +28,10 @@ public:
 
 public slots:
     void Decode(int newAudioType);
+
+signals:
+    void SearchDone(QString res);
+
 private slots:
     void readBuffer();
     void onFinished();

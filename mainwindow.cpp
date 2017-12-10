@@ -24,9 +24,13 @@ MainWindow::MainWindow()
     updateButton=new QPushButton(tr("update library"));
     connect(updateButton,SIGNAL(clicked(bool)),this,SLOT(UpdateLibrary()));
 
+    console = new QLabel(tr(""));
+    connect(preprocessing,SIGNAL(SearchDone(QString)),this,SLOT(DisplaySearchResult(QString)));
+
     QGridLayout *mainLayout =new QGridLayout;
 
     mainLayout->addWidget(renderArea,0,0,1,4);
+    mainLayout->addWidget(console,0,0,1,4,Qt::AlignCenter);
 
     mainLayout->addWidget(recordButton,1,1);
     mainLayout->addWidget(searchButton,1,2);
@@ -81,12 +85,15 @@ void MainWindow::StartSearch(){
     preprocessing->Decode(0);
 }
 
+void MainWindow::DisplaySearchResult(QString res){
+    console->setText(res);
+}
+
 void MainWindow::UpdateLibrary(){
     if(isLibraryToBeUpdated){
         indexManager = new IndexManager();
         DisableUpdate();
     }
-
 }
 
 void MainWindow::EnableUpdate(){

@@ -126,8 +126,9 @@ void Preprocessing::onFinished(){
         OutputFeatureBuffer();
     }else if(audioType==0){
         Search newSearch(featureBuffer);
+        QString res=newSearch.RankCandidates();
+        SearchDone(res);
     }
-
 }
 
 void Preprocessing::Framing(std::vector<double> pcmBuffer){

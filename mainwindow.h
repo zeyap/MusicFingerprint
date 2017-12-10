@@ -30,6 +30,7 @@ private slots:
     void ChooseFile();
     void StartSearch();
     void UpdateLibrary();
+    void DisplaySearchResult(QString res);
 
 private:
     void DisableUpdate();
@@ -48,6 +49,8 @@ private:
     bool isLibraryToBeUpdated;
 
     QPushButton* updateButton;
+
+    QLabel* console;
 
 };
 

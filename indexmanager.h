@@ -64,6 +64,7 @@ public:
     static int WriteSongKeyList(QString fname);
     static int FingerprintToLUTIndex(Fingerprint fp);
     static LUTHeadNode ReadLUT(int i);
+    static std::vector<SongInfo> ReadSongKeyList();
 
 private:
 
@@ -71,7 +72,6 @@ private:
     void GenLUT();
     void WriteLUT();
 
-    std::vector<SongInfo> ReadSongKeyList();
     SongData ReadSongWithKey(int i);
 
     static std::vector<int> LUTIndexToFingerprint(int i);

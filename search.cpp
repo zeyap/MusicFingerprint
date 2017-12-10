@@ -8,7 +8,6 @@ Search::Search(std::vector<FrameFeature> featureBuffer)
     featureNum=featureBuffer.size();
 
     GenCandidates(featureBuffer);
-    RankCandidates();
 
 }
 
@@ -57,7 +56,7 @@ void Search::GenCandidates(std::vector<FrameFeature> featureBuffer){
 }
 
 
-void Search::RankCandidates(){
+QString Search::RankCandidates(){
     //calculate dist
     int candidateNum=candidates.size();
     CandidateDistance* dist=new CandidateDistance[candidateNum];
@@ -69,10 +68,19 @@ void Search::RankCandidates(){
     }
     candidates.clear();
     //rank dist
-    SortDist(dist,candidateNum,3);
+    return FormattingResult(SortDist(dist,candidateNum,3));
+}
 
-    //show
-
+QString Search::FormattingResult(std::vector<CandidateDistance> res){
+    QString out="SongName\tDistance\n";
+    std::vector<SongInfo> songKeyList=IndexManager::ReadSongKeyList();
+    for(int i=res.size()-1;i>=0;i--){
+        out+=QString::number(res[i].d);
+        out+="\t";
+        out+=songKeyList[res[i].songIndex].name;
+        out+="\n";
+    }
+    return out;
 }
 
 int Search::FindPeak(int* tOffsetHistogram){
@@ -85,7 +93,7 @@ int Search::FindPeak(int* tOffsetHistogram){
     return peak;
 }
 
-void Search::SortDist(CandidateDistance* dist,int len,int sortLen){
+std::vector<CandidateDistance> Search::SortDist(CandidateDistance* dist,int len,int sortLen){
     int m=sortLen;
     if(m>len){
         m=len;
@@ -101,6 +109,10 @@ void Search::SortDist(CandidateDistance* dist,int len,int sortLen){
         }
     }
 
+    CandidateDistance x=q.dist[0];
+    CandidateDistance y=q.dist[1];
+    CandidateDistance z=q.dist[2];
+
     //show min dist
     std::vector<CandidateDistance> minDist;
     for(int i=0;i<m;i++){
@@ -108,12 +120,15 @@ void Search::SortDist(CandidateDistance* dist,int len,int sortLen){
         minDist.push_back(newd);
     }
 
+    return minDist;
+
 }
 
 MaxHeap::MaxHeap(CandidateDistance* newArray,int capacity){
     mCapacity=capacity;
     rearIndex=-1;
     dist=new CandidateDistance[mCapacity];
+    rest=new CandidateDistance[mCapacity];
     for(int i=0;i<mCapacity;i++){
         push(newArray[i]);
     }
@@ -147,20 +162,32 @@ CandidateDistance MaxHeap::top(){
 }
 
 CandidateDistance MaxHeap::pop(){
-    CandidateDistance* arrayAfterPop=new CandidateDistance[mCapacity];
+    CandidateDistance res=top();
     rearIndex--;
-
-    for(int i=0;i<=rearIndex;i++){
-        arrayAfterPop[i]=dist[i+1];
-    }
-
-    delete(dist);
-    for(int i=0;i<=rearIndex;i++){
-        push(arrayAfterPop[i]);
-        rearIndex--;
-    }
-    delete(arrayAfterPop);
-    return top();
+    UpdateMaxHeap();
+    return res;
 }
 
+void MaxHeap::UpdateMaxHeap(){
 
+    for(int i=0;i<=rearIndex;i++){
+        rest[i]=dist[i+1];
+    }
+
+    int newHeapSize=rearIndex;
+    clear(dist,mCapacity);
+
+    for(int i=0;i<=newHeapSize;i++){
+        push(rest[i]);
+    }
+}
+
+void MaxHeap::clear(CandidateDistance* array, int capacity){
+    rearIndex=-1;
+/*
+    for(int i=0;i<=capacity;i++){
+        array[i].d=0;
+        array[i].songIndex=0;
+    }
+*/
+}

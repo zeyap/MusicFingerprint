@@ -29,6 +29,8 @@ public:
 
 class CandidateDistance{
 public:
+    CandidateDistance(){}
+    ~CandidateDistance(){}
     float d;
     int songIndex;
 };
@@ -43,20 +45,24 @@ public:
 
     CandidateDistance* dist;
 private:
+    void clear(CandidateDistance* array, int capacity);
+    void UpdateMaxHeap();
     int mCapacity;
     int rearIndex;
+    CandidateDistance* rest;//buffer
 };
 
 class Search
 {
 public:
     Search(std::vector<FrameFeature> featureBuffer);
+    QString RankCandidates();
 private:
 
     void GenCandidates(std::vector<FrameFeature> featureBuffer);
-    void RankCandidates();
     int FindPeak(int* tOffsetHistogram);
-    void SortDist(CandidateDistance* dist,int len, int sortLen);
+    std::vector<CandidateDistance> SortDist(CandidateDistance* dist,int len, int sortLen);
+    QString FormattingResult(std::vector<CandidateDistance> res);
 
     int featureNum;//InRecording
     std::vector<CandidateSong> candidates;
