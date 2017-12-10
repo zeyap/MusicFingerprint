@@ -27,6 +27,26 @@ public:
     int tOffsetHistogram[Histogram_Max_Range];//=0
 };
 
+class CandidateDistance{
+public:
+    float d;
+    int songIndex;
+};
+
+class MaxHeap{
+public:
+    MaxHeap(CandidateDistance* newArray,int capacity);
+
+    void push(CandidateDistance newElem);
+    CandidateDistance top();
+    CandidateDistance pop();
+
+    CandidateDistance* dist;
+private:
+    int mCapacity;
+    int rearIndex;
+};
+
 class Search
 {
 public:
@@ -36,7 +56,7 @@ private:
     void GenCandidates(std::vector<FrameFeature> featureBuffer);
     void RankCandidates();
     int FindPeak(int* tOffsetHistogram);
-    void RankDist(float* d,int len);
+    void SortDist(CandidateDistance* dist,int len, int sortLen);
 
     int featureNum;//InRecording
     std::vector<CandidateSong> candidates;

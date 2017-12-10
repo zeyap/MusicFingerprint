@@ -56,18 +56,20 @@ void Search::GenCandidates(std::vector<FrameFeature> featureBuffer){
     }
 }
 
+
 void Search::RankCandidates(){
     //calculate dist
     int candidateNum=candidates.size();
-    float* d=new float(candidateNum);
+    CandidateDistance* dist=new CandidateDistance[candidateNum];
     for(int i=0;i<candidateNum;i++){
         int peak=FindPeak(candidates[i].tOffsetHistogram);
         int matchNum=candidates[i].matchingNum;
-        d[i]=featureNum*featureNum/1.0f*(peak*matchNum);
+        dist[i].d=featureNum*featureNum/1.0f*(peak*matchNum);
+        dist[i].songIndex=candidates[i].index;
     }
     candidates.clear();
     //rank dist
-    RankDist(d,candidateNum);
+    SortDist(dist,candidateNum,3);
 
     //show
 
@@ -83,6 +85,82 @@ int Search::FindPeak(int* tOffsetHistogram){
     return peak;
 }
 
-void Search::RankDist(float* d,int len){
+void Search::SortDist(CandidateDistance* dist,int len,int sortLen){
+    int m=sortLen;
+    if(m>len){
+        m=len;
+    }
+    MaxHeap q(dist,m);
+
+    CandidateDistance top=q.top();//top: max in heap
+
+    for(int i=m;i<len;i++){
+        if(dist[i].d<top.d){
+            q.pop();
+            q.push(dist[i]);
+        }
+    }
+
+    //show min dist
+    std::vector<CandidateDistance> minDist;
+    for(int i=0;i<m;i++){
+        CandidateDistance newd=q.pop();
+        minDist.push_back(newd);
+    }
 
 }
+
+MaxHeap::MaxHeap(CandidateDistance* newArray,int capacity){
+    mCapacity=capacity;
+    rearIndex=-1;
+    dist=new CandidateDistance[mCapacity];
+    for(int i=0;i<mCapacity;i++){
+        push(newArray[i]);
+    }
+
+}
+
+void MaxHeap::push(CandidateDistance newElem){
+    rearIndex++;
+    dist[rearIndex]=newElem;
+    if(rearIndex){
+        int currIndex=rearIndex;
+        int parentIndex;
+        //percolate up
+        while(currIndex>0){
+            parentIndex=(currIndex-1)/2;
+            if(dist[currIndex].d>dist[parentIndex].d){
+                CandidateDistance temp=dist[parentIndex];
+                dist[parentIndex]=dist[currIndex];
+                dist[currIndex]=temp;
+                currIndex=parentIndex;
+            }
+            else{
+                break;
+            }
+        }
+    }
+}
+
+CandidateDistance MaxHeap::top(){
+    return dist[0];
+}
+
+CandidateDistance MaxHeap::pop(){
+    CandidateDistance* arrayAfterPop=new CandidateDistance[mCapacity];
+    rearIndex--;
+
+    for(int i=0;i<=rearIndex;i++){
+        arrayAfterPop[i]=dist[i+1];
+    }
+
+    delete(dist);
+    for(int i=0;i<=rearIndex;i++){
+        push(arrayAfterPop[i]);
+        rearIndex--;
+    }
+    delete(arrayAfterPop);
+    return top();
+}
+
+
