@@ -30,17 +30,11 @@ void Search::GenCandidates(std::vector<FrameFeature> featureBuffer){
                 if(tline==NULL)
                     break;
                 QStringList tlineList=tline.split(", ",QString::SkipEmptyParts);
-                QString record[Feature_Size+1];
-                Fingerprint newfp;
+                QString record1=tlineList.at(0);
+                QString record2=tlineList.at(1);
                 bool ok;
-                for(int j=0;j<Feature_Size;j++){
-                    record[j]=tlineList.at(j);
-                    newfp.array[j]=record[j].toInt(&ok,10);
-                }
-                record[Feature_Size]=tlineList.at(Feature_Size);
-
-                int tSongIndex=IndexManager::FingerprintToLUTIndex(newfp);
-                int tPosOnHistogram=(int) abs(record[Feature_Size].toFloat(&ok)-featureBuffer[i].t)/0.05f;
+                int tSongIndex=record1.toInt(&ok,10);
+                int tPosOnHistogram=(int) abs(record2.toFloat(&ok)-featureBuffer[i].t)/0.05f;
 
                 if(candidateIndexLookUpTable[tSongIndex]==-1){
                     candidateIndexLookUpTable[tSongIndex]=candidateNum;
