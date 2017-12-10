@@ -56,6 +56,8 @@ void MainWindow::Decode(){
 }
 
 void MainWindow::RecordSwitch(){
+    preprocessing->SetTargetFile("MEGALOVANIA-toby fox.mp3");
+    /*
     if(isRecording==false){
         recorder->StartRecording();
         recordButton->setText("stop Recording");
@@ -65,6 +67,8 @@ void MainWindow::RecordSwitch(){
         QString fname=recorder->getRecordingFileName();
         preprocessing->SetTargetFile(fname);
     }
+*/
+
     isRecording=!isRecording;
 }
 
