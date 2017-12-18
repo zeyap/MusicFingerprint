@@ -18,7 +18,7 @@ Generate a feature vector/**Music fingerprint** for each frame. [Shazam](https:/
 
 For each song, write feature vectors into a file
 
-![](zeyap.github.io/assets/images/mf_1.png)
+![](https://github.com/zeyap/zeyap.github.io/raw/master/assets/images/mf_1.png)
 
 <h3>Index Manager</h3>
 
@@ -32,4 +32,4 @@ Find possible music candidates -- match features from a new recording with exist
 
 Sort candidates by Distance to the recording in a Priority Queue/Maximum Heap
 
-![](zeyap.github.io/assets/images/mf_2.png)
+![](https://github.com/zeyap/zeyap.github.io/raw/master/assets/images/mf_2.png)
