@@ -27,13 +27,15 @@ void IndexManager::GenLUT(){
 
             if(LUT[LUTindex].recordCount==0){
                 LUT[LUTindex].pRecords=newRecord;
-                LUT[LUTindex].pRear=newRecord;
+                LUT[LUTindex].pRear=LUT[LUTindex].pRecords;
             }else{
                 LUT[LUTindex].pRear->next=newRecord;
+                LUT[LUTindex].pRear=LUT[LUTindex].pRear->next;
             }
             LUT[LUTindex].recordCount++;
         }
     }
+
     //Sort songs in a bucket
     WriteLUT();
 }
