@@ -31,6 +31,8 @@ public slots:
 
 signals:
     void SearchDone(QString res);
+    void UpdateTag(std::vector<int>newTag);
+    void DecodeFinish();
 
 private slots:
     void readBuffer();

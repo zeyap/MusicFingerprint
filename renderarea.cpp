@@ -1,24 +1,5 @@
 #include "renderarea.h"
 
-static std::vector<int> tags;
-static RenderArea* renderArea;
-
-RenderArea::RenderArea(QWidget *parent)
-    : QWidget(parent)
-{
-    setBackgroundRole(QPalette::Base);
-    setAutoFillBackground(true);
-
-}
-
-RenderArea* RenderArea::getInstance(){
-    if(renderArea==NULL){
-        renderArea=new RenderArea;
-        renderArea->Init();
-    }
-    return renderArea;
-}
-
 void RenderArea::Init(){
     tags.clear();
 }

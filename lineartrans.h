@@ -14,13 +14,13 @@ public:
     LinearTrans(std::vector<double> pcmInput, int fnum, int audioType);
     ~LinearTrans();
     std::vector<int> GetFeatureVector();
+    std::vector<int> GetFeatureTags(int fnum);
 private:
     double *in;
     fftw_complex *out;
     fftw_plan p;
     RenderArea* renderArea;
     void FFT();
-    void ShowFeature(int fnum);
 
     void GenFeatureVector(fftw_complex* out);
     int featurev[5][2];//freq+db

@@ -12,20 +12,26 @@ TARGET = MusicFingerprint
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
     preprocessing.cpp \
     lineartrans.cpp \
     renderarea.cpp \
     recorder.cpp \
     indexmanager.cpp \
-    search.cpp
+    search.cpp \
+    mainwindowmf.cpp
 
 HEADERS += \
-        mainwindow.h \
     preprocessing.h \
     lineartrans.h \
     renderarea.h \
     main.h \
     recorder.h \
     indexmanager.h \
-    search.h
+    search.h \
+    mainwindowmf.h
+
+FORMS += \
+    mainwindowmf.ui
+
+RESOURCES += \
+    MusicFingerprint.qrc

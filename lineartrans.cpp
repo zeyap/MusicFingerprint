@@ -1,4 +1,5 @@
 #include "lineartrans.h"
+#include "mainwindowmf.h"
 
 LinearTrans::LinearTrans(std::vector<double> pcmInput, int fnum, int audioType)
 {
@@ -13,8 +14,6 @@ LinearTrans::LinearTrans(std::vector<double> pcmInput, int fnum, int audioType)
     FFT();
 
     GenFeatureVector(out);
-
-    ShowFeature(fnum);
 
 }
 
@@ -68,8 +67,8 @@ std::vector<int> LinearTrans::GetFeatureVector(){
     return v;
 }
 
-void LinearTrans::ShowFeature(int fnum){
-    renderArea=RenderArea::getInstance();
+std::vector<int> LinearTrans::GetFeatureTags(int fnum){
+
     std::vector<int> newTag;
     newTag.push_back(0);
     newTag.push_back(fnum);
@@ -77,7 +76,7 @@ void LinearTrans::ShowFeature(int fnum){
         newTag.push_back(featurev[i][0]);
         newTag.push_back(featurev[i][1]);
     }
-    renderArea->GetTag(newTag);
+    return newTag;
 }
 
 int LinearTrans::Amp2dB(double amp){

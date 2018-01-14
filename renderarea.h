@@ -18,8 +18,15 @@ class RenderArea:public QWidget
     Q_OBJECT
 
 public:
-    static RenderArea* getInstance();
-    static void Init();
+    explicit RenderArea(QWidget *parent)
+        : QWidget(parent)
+    {
+        setBackgroundRole(QPalette::Base);
+        setAutoFillBackground(true);
+
+    }
+
+    void Init();
 
     void GetTag(std::vector<int> newTag);
 
@@ -28,8 +35,8 @@ protected:
     void paintEvent(QPaintEvent *) override;
 
 private:
-    RenderArea(QWidget *parent=0);
     int rectOffsetX;
+    std::vector<int> tags;
 };
 
 #endif // RENDERAREA_H

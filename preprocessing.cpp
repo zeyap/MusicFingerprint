@@ -129,6 +129,7 @@ void Preprocessing::onFinished(){
         QString res=newSearch.RankCandidates();
         SearchDone(res);
     }
+    DecodeFinish();
 }
 
 void Preprocessing::Framing(std::vector<double> pcmBuffer){
@@ -156,6 +157,8 @@ void Preprocessing::FrameProcess(std::vector<double> frame,int fnum){
 
     FrameFeature newf;
     std::vector<int> v=newDFT->GetFeatureVector();
+    std::vector<int> newTag=newDFT->GetFeatureTags(fnum);
+    UpdateTag(newTag);
     for(int i=0;i<Feature_Size;i++){
         newf.f.array[i]=v[i];
     }
