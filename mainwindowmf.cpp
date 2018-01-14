@@ -8,13 +8,13 @@ MainWindowMF::MainWindowMF(QWidget *parent) :
     preprocessing=new Preprocessing();
     recorder=new Recorder();
     renderArea=new RenderArea(this);
-    renderArea->setFixedSize(500,500);
+    renderArea->setFixedSize(500,250);
 
     connect(preprocessing,SIGNAL(SearchDone(QString)),this,SLOT(DisplaySearchResult(QString)));
     connect(preprocessing,SIGNAL(UpdateTag(std::vector<int>)),this,SLOT(UpdateTag(std::vector<int>)));
     connect(preprocessing,SIGNAL(DecodeFinish()),this,SLOT(OnDecodeFinish()));
 
-    //ui->pushButton->setStyleSheet("color:red");
+    //ui->pushButton->setStyleSheet("background-image: url(:/images/preview.png)");
     ui->setupUi(this);
 
     isRecording=false;
