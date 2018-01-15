@@ -27,9 +27,9 @@
     <property name="geometry">
      <rect>
       <x>550</x>
-      <y>0</y>
-      <width>121</width>
-      <height>121</height>
+      <y>30</y>
+      <width>131</width>
+      <height>131</height>
      </rect>
     </property>
     <property name="palette">
@@ -168,7 +168,7 @@
      <string notr="true">border-image:url(D:/Study/VideoAudio_Processing/musicprocessing/mf/MusicFingerprint/images/preview.png);color:rgb(176, 67, 69)</string>
     </property>
     <property name="text">
-     <string>Start Recording</string>
+     <string>Click and Record</string>
     </property>
     <property name="autoExclusive">
      <bool>false</bool>
@@ -187,7 +187,7 @@
     <property name="geometry">
      <rect>
       <x>530</x>
-      <y>100</y>
+      <y>110</y>
       <width>181</width>
       <height>31</height>
      </rect>
@@ -211,7 +211,7 @@
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>130</y>
+      <y>140</y>
       <width>141</width>
       <height>31</height>
      </rect>
@@ -230,10 +230,10 @@
    <widget class="QLabel" name="fileLabel">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>160</y>
-      <width>201</width>
-      <height>71</height>
+      <x>500</x>
+      <y>170</y>
+      <width>221</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
