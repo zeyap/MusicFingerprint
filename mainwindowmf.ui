@@ -14,7 +14,10 @@
    <string>Music Fingerprint</string>
   </property>
   <property name="autoFillBackground">
-   <bool>true</bool>
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">border-image:url(D:/Study/VideoAudio_Processing/musicprocessing/mf/MusicFingerprint/images/bg.png)</string>
   </property>
   <property name="toolButtonStyle">
    <enum>Qt::ToolButtonIconOnly</enum>
@@ -23,26 +26,62 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>30</y>
-      <width>141</width>
-      <height>41</height>
+      <x>550</x>
+      <y>0</y>
+      <width>121</width>
+      <height>121</height>
      </rect>
     </property>
     <property name="palette">
      <palette>
       <active>
+       <colorrole role="WindowText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>176</red>
+          <green>67</green>
+          <blue>69</blue>
+         </color>
+        </brush>
+       </colorrole>
        <colorrole role="Button">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
           <red>222</red>
           <green>54</green>
           <blue>54</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Text">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>176</red>
+          <green>67</green>
+          <blue>69</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="ButtonText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>176</red>
+          <green>67</green>
+          <blue>69</blue>
          </color>
         </brush>
        </colorrole>
       </active>
       <inactive>
+       <colorrole role="WindowText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>176</red>
+          <green>67</green>
+          <blue>69</blue>
+         </color>
+        </brush>
+       </colorrole>
        <colorrole role="Button">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
@@ -52,14 +91,59 @@
          </color>
         </brush>
        </colorrole>
+       <colorrole role="Text">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>176</red>
+          <green>67</green>
+          <blue>69</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="ButtonText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>176</red>
+          <green>67</green>
+          <blue>69</blue>
+         </color>
+        </brush>
+       </colorrole>
       </inactive>
       <disabled>
+       <colorrole role="WindowText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>176</red>
+          <green>67</green>
+          <blue>69</blue>
+         </color>
+        </brush>
+       </colorrole>
        <colorrole role="Button">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
           <red>222</red>
           <green>54</green>
           <blue>54</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Text">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>176</red>
+          <green>67</green>
+          <blue>69</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="ButtonText">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>176</red>
+          <green>67</green>
+          <blue>69</blue>
          </color>
         </brush>
        </colorrole>
@@ -68,8 +152,10 @@
     </property>
     <property name="font">
      <font>
-      <family>Calibri Light</family>
+      <family>Calibri</family>
       <pointsize>14</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="layoutDirection">
@@ -79,7 +165,7 @@
      <bool>false</bool>
     </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">border-image:url(D:/Study/VideoAudio_Processing/musicprocessing/mf/MusicFingerprint/images/preview.png);color:rgb(176, 67, 69)</string>
     </property>
     <property name="text">
      <string>Start Recording</string>
@@ -100,9 +186,9 @@
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>160</y>
-      <width>141</width>
+      <x>530</x>
+      <y>100</y>
+      <width>181</width>
       <height>31</height>
      </rect>
     </property>
@@ -113,7 +199,7 @@
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">border-image:url(D:/Study/VideoAudio_Processing/musicprocessing/mf/MusicFingerprint/images/import.png)</string>
     </property>
     <property name="text">
      <string>Import local music</string>
@@ -123,7 +209,7 @@
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>200</y>
+      <y>130</y>
       <width>141</width>
       <height>31</height>
      </rect>
@@ -143,7 +229,7 @@
     <property name="geometry">
      <rect>
       <x>510</x>
-      <y>90</y>
+      <y>160</y>
       <width>201</width>
       <height>71</height>
      </rect>
