@@ -168,7 +168,7 @@
      <string notr="true">border-image:url(D:/Study/VideoAudio_Processing/musicprocessing/mf/MusicFingerprint/images/preview.png);color:rgb(176, 67, 69)</string>
     </property>
     <property name="text">
-     <string>Click and Record</string>
+     <string>Click and record</string>
     </property>
     <property name="autoExclusive">
      <bool>false</bool>
